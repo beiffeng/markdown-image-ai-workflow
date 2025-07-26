@@ -72,3 +72,7 @@ coverage/
 test-images/
 test-markdown/
 *.test.md
+assets/
+
+# Claude配置文件
+.claude/
