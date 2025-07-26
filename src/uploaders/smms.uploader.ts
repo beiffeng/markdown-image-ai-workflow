@@ -51,7 +51,7 @@ export class SMSUploader implements ImageUploader {
       };
 
       if (token) {
-        headers['Authorization'] = token;
+        headers['Authorization'] = `Bearer ${token}`;
         console.log('MarkdownImageFlow: 使用API Token上传');
       } else {
         console.log('MarkdownImageFlow: 使用匿名上传');
@@ -100,6 +100,11 @@ export class SMSUploader implements ImageUploader {
           }
           errorMsg = '图片已存在';
         } else if (responseData.code === 'unauthorized') {
+          // Token失效时，尝试匿名上传
+          if (token) {
+            console.log('MarkdownImageFlow: API Token失效，尝试匿名上传...');
+            return await this.uploadAnonymously(filePath);
+          }
           errorMsg = 'API Token无效或已过期';
         } else if (responseData.code === 'flood') {
           errorMsg = '上传过于频繁，请稍后再试';
@@ -131,6 +136,74 @@ export class SMSUploader implements ImageUploader {
       return {
         success: false,
         error: errorMsg,
+        provider: this.name
+      };
+    }
+  }
+
+  /**
+   * 匿名上传（当Token失效时的fallback）
+   */
+  private async uploadAnonymously(filePath: string): Promise<UploadResult> {
+    try {
+      // 读取文件
+      const fileBuffer = await fs.promises.readFile(filePath);
+      const fileName = filePath.split('/').pop() || 'image';
+
+      // 准备FormData（不包含Authorization头）
+      const formData = new FormData();
+      formData.append('smfile', fileBuffer, {
+        filename: fileName,
+        contentType: 'image/' + fileName.split('.').pop()?.toLowerCase()
+      });
+
+      const headers: Record<string, string> = {
+        'User-Agent': 'VSCode-MarkdownImageFlow/1.0',
+        ...formData.getHeaders()
+      };
+
+      console.log('MarkdownImageFlow: 使用匿名模式上传');
+
+      // 使用fetch发送请求
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 30000);
+
+      const response = await fetch(this.API_URL, {
+        method: 'POST',
+        headers,
+        body: formData,
+        signal: controller.signal
+      });
+
+      clearTimeout(timeoutId);
+
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      }
+
+      const responseData = await response.json() as any;
+      console.log('MarkdownImageFlow: SM.MS匿名上传响应:', JSON.stringify(responseData, null, 2));
+
+      // 处理响应
+      if (responseData.success) {
+        console.log('MarkdownImageFlow: ✅ 匿名上传成功！');
+        return {
+          success: true,
+          url: responseData.data.url,
+          provider: this.name + ' (匿名)'
+        };
+      } else {
+        return {
+          success: false,
+          error: responseData.message || '匿名上传失败',
+          provider: this.name
+        };
+      }
+    } catch (error) {
+      console.error('MarkdownImageFlow: 匿名上传失败:', error);
+      return {
+        success: false,
+        error: '匿名上传失败',
         provider: this.name
       };
     }
