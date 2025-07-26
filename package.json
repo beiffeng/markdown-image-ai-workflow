@@ -1,0 +1,131 @@
+{
+  "name": "markdown-image-flow",
+  "displayName": "Markdown Image Flow",
+  "description": "专为 Markdown 写作优化的多平台图片流程管理工具，支持智能上传、同步处理，让图片处理如流水般顺畅",
+  "version": "0.1.0",
+  "engines": {
+    "vscode": "^1.79.0"
+  },
+  "categories": [
+    "Productivity"
+  ],
+  "keywords": [
+    "markdown",
+    "image",
+    "flow",
+    "sync",
+    "upload",
+    "multi-platform",
+    "workflow",
+    "productivity",
+    "smms",
+    "github",
+    "cloudinary"
+  ],
+  "activationEvents": [
+    "*",
+    "onCommand:markdownImageFlow.checkVSCodeConfig",
+    "onCommand:markdownImageFlow.setupRecommendedConfig", 
+    "onCommand:markdownImageFlow.uploadCurrentImage"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "configuration": {
+      "title": "Markdown Image Flow - 多平台图片流程管理",
+      "properties": {
+        "markdownImageFlow.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "启用自动图床上传（需要先配置VSCode的markdown.copyFiles.destination）"
+        },
+        "markdownImageFlow.provider": {
+          "type": "string",
+          "enum": ["smms", "github", "cloudinary"],
+          "default": "smms",
+          "description": "图床服务提供商",
+          "enumDescriptions": [
+            "SM.MS - 免费图床服务",
+            "GitHub - 使用GitHub仓库作为图床",
+            "Cloudinary - 专业图片CDN服务"
+          ]
+        },
+        "markdownImageFlow.respectVSCodeConfig": {
+          "type": "boolean",
+          "default": true,
+          "description": "严格遵循VSCode原生markdown.copyFiles.destination配置"
+        },
+        "markdownImageFlow.fallbackBehavior": {
+          "type": "string",
+          "enum": ["sameDirectory", "disable", "prompt"],
+          "default": "sameDirectory",
+          "description": "当未配置markdown.copyFiles.destination时的处理方式",
+          "enumDescriptions": [
+            "同级目录 - 监控markdown文件同级目录的图片",
+            "禁用 - 不处理图片上传",
+            "提示 - 提示用户配置markdown.copyFiles.destination"
+          ]
+        },
+        "markdownImageFlow.smms.token": {
+          "type": "string",
+          "default": "",
+          "description": "SM.MS API Token（可选，有助于提高上传限制）"
+        },
+        "markdownImageFlow.github.repo": {
+          "type": "string",
+          "default": "",
+          "description": "GitHub仓库名称，格式：username/repo"
+        },
+        "markdownImageFlow.github.token": {
+          "type": "string",
+          "default": "",
+          "description": "GitHub Personal Access Token"
+        },
+        "markdownImageFlow.github.branch": {
+          "type": "string",
+          "default": "main",
+          "description": "GitHub仓库分支名称"
+        },
+        "markdownImageFlow.deleteLocalAfterUpload": {
+          "type": "boolean",
+          "default": false,
+          "description": "上传成功后删除本地图片文件"
+        }
+      }
+    },
+    "commands": [
+      {
+        "command": "markdownImageFlow.checkVSCodeConfig",
+        "title": "检查VSCode图片粘贴配置"
+      },
+      {
+        "command": "markdownImageFlow.setupRecommendedConfig",
+        "title": "设置推荐的markdown.copyFiles.destination配置"
+      },
+      {
+        "command": "markdownImageFlow.uploadCurrentImage",
+        "title": "上传当前光标位置的图片"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.102.0",
+    "@types/node": "^24.1.0",
+    "typescript": "^5.8.3"
+  },
+  "dependencies": {
+    "axios": "^1.11.0",
+    "minimatch": "^10.0.3",
+    "node-fetch": "^3.3.2",
+    "form-data": "^4.0.4"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-username/vscode-image-bed-uploader.git"
+  },
+  "license": "MIT"
+}

@@ -1,0 +1,30 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Extension",
+      "type": "extensionHost",
+      "request": "launch",
+      "args": [
+        "--extensionDevelopmentPath=${workspaceFolder}"
+      ],
+      "env": {
+        "NODE_NO_WARNINGS": "1"
+      },
+      "preLaunchTask": "tsc: build - tsconfig.json"
+    },
+    {
+      "name": "Extension Tests",
+      "type": "extensionHost",
+      "request": "launch",
+      "args": [
+        "--extensionDevelopmentPath=${workspaceFolder}",
+        "--extensionTestsPath=${workspaceFolder}/out/test/suite/index"
+      ],
+      "env": {
+        "NODE_NO_WARNINGS": "1"
+      },
+      "preLaunchTask": "tsc: build - tsconfig.json"
+    }
+  ]
+}
