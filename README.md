@@ -1,6 +1,6 @@
 # Markdown Image Flow
 
-[![Version](https://img.shields.io/badge/version-0.1.0-blue.svg)](https://github.com/your-username/markdown-image-flow)
+[![Version](https://img.shields.io/badge/version-0.1.0-blue.svg)](https://github.com/beiffeng/markdown-image-flow)
 [![VSCode](https://img.shields.io/badge/VSCode-1.79+-green.svg)](https://code.visualstudio.com/)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
@@ -215,9 +215,9 @@ Markdown Image Flow: 设置推荐配置
 
 我们欢迎任何形式的贡献！
 
-- 🐛 **报告问题** - [GitHub Issues](https://github.com/your-username/markdown-image-flow/issues)
-- 💡 **功能建议** - [GitHub Discussions](https://github.com/your-username/markdown-image-flow/discussions)
-- 🔧 **代码贡献** - [Pull Requests](https://github.com/your-username/markdown-image-flow/pulls)
+- 🐛 **报告问题** - [GitHub Issues](https://github.com/beiffeng/markdown-image-flow/issues)
+- 💡 **功能建议** - [GitHub Discussions](https://github.com/beiffeng/markdown-image-flow/discussions)
+- 🔧 **代码贡献** - [Pull Requests](https://github.com/beiffeng/markdown-image-flow/pulls)
 
 ## 📄 开源协议
 
@@ -235,6 +235,6 @@ Markdown Image Flow: 设置推荐配置
 
 **让 Markdown 写作更加流畅** ✨
 
-[⭐ Star](https://github.com/your-username/markdown-image-flow) | [🐛 报告问题](https://github.com/your-username/markdown-image-flow/issues) | [💬 讨论](https://github.com/your-username/markdown-image-flow/discussions)
+[⭐ Star](https://github.com/beiffeng/markdown-image-flow) | [🐛 报告问题](https://github.com/beiffeng/markdown-image-flow/issues) | [💬 讨论](https://github.com/beiffeng/markdown-image-flow/discussions)
 
 </div>
