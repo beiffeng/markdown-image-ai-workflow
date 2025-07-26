@@ -120,7 +120,7 @@ export class ConfigurationGuide {
     });
 
     if (choice) {
-      const config = vscode.workspace.getConfiguration('imageBedUploader');
+      const config = vscode.workspace.getConfiguration('markdownImageFlow');
       await config.update('provider', choice.provider, vscode.ConfigurationTarget.Global);
 
       if (choice.provider === 'github') {
@@ -152,7 +152,7 @@ export class ConfigurationGuide {
 
     if (!token) return;
 
-    const config = vscode.workspace.getConfiguration('imageBedUploader.github');
+    const config = vscode.workspace.getConfiguration('markdownImageFlow.github');
     await config.update('repo', repo, vscode.ConfigurationTarget.Global);
     await config.update('token', token, vscode.ConfigurationTarget.Global);
 
@@ -177,7 +177,7 @@ export class ConfigurationGuide {
       });
 
       if (token) {
-        const config = vscode.workspace.getConfiguration('imageBedUploader.smms');
+        const config = vscode.workspace.getConfiguration('markdownImageFlow.smms');
         await config.update('token', token, vscode.ConfigurationTarget.Global);
         vscode.window.showInformationMessage('✅ SM.MS Token已保存');
       }
@@ -208,7 +208,7 @@ export class ConfigurationGuide {
     );
 
     if (choice === '查看设置') {
-      await vscode.commands.executeCommand('workbench.action.openSettings', 'imageBedUploader');
+      await vscode.commands.executeCommand('workbench.action.openSettings', 'markdownImageFlow');
     }
   }
 
