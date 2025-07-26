@@ -103,7 +103,7 @@ export class ConfigurationGuide {
       {
         label: '$(cloud) SM.MS',
         description: '免费图床服务',
-        detail: '无需配置，可选择添加API Token以获得更高限制',
+        detail: '需要配置API Token（已停止匿名上传）',
         provider: 'smms'
       },
       {
@@ -164,9 +164,9 @@ export class ConfigurationGuide {
    */
   private async configureSMMS(): Promise<void> {
     const choice = await vscode.window.showInformationMessage(
-      'SM.MS无需配置即可使用。是否要配置API Token以获得更高的上传限制？',
+      'SM.MS已停止匿名上传服务，必须配置API Token才能使用。',
       '配置Token',
-      '跳过'
+      '取消'
     );
 
     if (choice === '配置Token') {
@@ -183,7 +183,11 @@ export class ConfigurationGuide {
       }
     }
 
-    vscode.window.showInformationMessage('✅ SM.MS配置完成，现在可以直接使用');
+    if (choice === '配置Token') {
+      vscode.window.showInformationMessage('✅ SM.MS Token配置完成，现在可以使用');
+    } else {
+      vscode.window.showWarningMessage('⚠️ 未配置SM.MS Token，无法使用SM.MS服务');
+    }
   }
 
   /**
