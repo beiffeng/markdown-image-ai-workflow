@@ -151,7 +151,7 @@ export class SMSUploader implements ImageUploader {
     hasToken: boolean;
     status: string;
   } {
-    const config = vscode.workspace.getConfiguration('imageBedUploader.smms');
+    const config = vscode.workspace.getConfiguration('markdownImageFlow.smms');
     const token = config.get<string>('token');
     const hasToken = !!token;
 
