@@ -62,7 +62,7 @@ export class GitHubUploader implements ImageUploader {
       // 上传文件
       const uploadUrl = `${this.API_BASE}/repos/${config.repo}/contents/${remotePath}`;
       const uploadData = {
-        message: `Upload ${fileName} via VSCode Image Bed Uploader`,
+        message: `Upload ${fileName} via VSCode Markdown Image Flow`,
         content: base64Content,
         branch: config.branch
       };

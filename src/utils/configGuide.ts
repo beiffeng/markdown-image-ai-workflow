@@ -9,7 +9,7 @@ export class ConfigurationGuide {
    */
   async showWelcomeGuide(): Promise<void> {
     const message = `
-🎉 欢迎使用 Image Bed Uploader！
+🎉 欢迎使用 Markdown Image Flow！
 
 这个插件基于VSCode原生的 markdown.copyFiles.destination 特性，
 自动将粘贴的图片上传到图床并替换为远程链接。
@@ -47,7 +47,7 @@ export class ConfigurationGuide {
     }
 
     // 步骤2：配置图床服务
-    await this.configureImageBed();
+    await this.configureImageFlow();
 
     // 步骤3：完成配置
     await this.showConfigurationComplete();
@@ -98,7 +98,7 @@ export class ConfigurationGuide {
   /**
    * 配置图床服务
    */
-  private async configureImageBed(): Promise<void> {
+  private async configureImageFlow(): Promise<void> {
     const providers = [
       {
         label: '$(cloud) SM.MS',
@@ -217,7 +217,7 @@ export class ConfigurationGuide {
    */
   private async openDocumentation(): Promise<void> {
     // 这里可以打开项目的README或在线文档
-    vscode.env.openExternal(vscode.Uri.parse('https://github.com/your-username/vscode-image-bed-uploader'));
+    vscode.env.openExternal(vscode.Uri.parse('https://github.com/beiffeng/markdown-image-flow'));
   }
 
   /**
