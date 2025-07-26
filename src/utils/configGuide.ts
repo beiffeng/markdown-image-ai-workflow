@@ -102,8 +102,8 @@ export class ConfigurationGuide {
     const providers = [
       {
         label: '$(cloud) SM.MS',
-        description: '免费图床服务',
-        detail: '需要配置API Token（已停止匿名上传）',
+        description: '⚠️ 不推荐（已停止注册）',
+        detail: '已关闭新用户注册，仅供现有用户使用',
         provider: 'smms'
       },
       {
@@ -163,13 +163,13 @@ export class ConfigurationGuide {
    * 配置SM.MS
    */
   private async configureSMMS(): Promise<void> {
-    const choice = await vscode.window.showInformationMessage(
-      'SM.MS已停止匿名上传服务，必须配置API Token才能使用。',
-      '配置Token',
+    const choice = await vscode.window.showWarningMessage(
+      '⚠️ SM.MS已停止新用户注册且停止匿名上传。仅现有用户可配置API Token使用。建议选择GitHub图床方案。',
+      '我有SM.MS账户，继续配置',
       '取消'
     );
 
-    if (choice === '配置Token') {
+    if (choice === '我有SM.MS账户，继续配置') {
       const token = await vscode.window.showInputBox({
         title: '配置SM.MS Token',
         prompt: '请输入SM.MS API Token（可在 https://sm.ms/home/apitoken 获取）',
@@ -183,10 +183,10 @@ export class ConfigurationGuide {
       }
     }
 
-    if (choice === '配置Token') {
+    if (choice === '我有SM.MS账户，继续配置') {
       vscode.window.showInformationMessage('✅ SM.MS Token配置完成，现在可以使用');
     } else {
-      vscode.window.showWarningMessage('⚠️ 未配置SM.MS Token，无法使用SM.MS服务');
+      vscode.window.showInformationMessage('ℹ️ 建议使用GitHub作为图床方案，更稳定可靠');
     }
   }
 

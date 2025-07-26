@@ -56,16 +56,9 @@ Markdown Image Flow: 设置推荐配置
 
 ### 3️⃣ 选择图床平台
 
-#### 🎯 SM.MS（推荐入门）
-```json
-{
-  "markdownImageFlow.provider": "smms"
-  // 可选：配置 API Token 获得更高限制
-  // "markdownImageFlow.smms.token": "your-token-here"
-}
-```
+> ⚠️ **重要提醒**：不建议使用 SM.MS，因为该服务已关闭新用户注册功能 (We have disabled the registration feature)，现有用户也受到诸多限制。建议使用 GitHub 作为图床方案。
 
-#### 🔒 GitHub（私有控制）
+#### 🔒 GitHub（推荐）
 ```json
 {
   "markdownImageFlow.provider": "github",
@@ -74,6 +67,16 @@ Markdown Image Flow: 设置推荐配置
   "markdownImageFlow.github.branch": "main"
 }
 ```
+
+#### ❌ SM.MS（不推荐，仅供已有用户）
+```json
+{
+  "markdownImageFlow.provider": "smms",
+  "markdownImageFlow.smms.token": "your-api-token-here"
+}
+```
+
+**注意**：SM.MS 已停止新用户注册，且停止匿名上传服务。除非您已有账户和 API Token，否则请使用 GitHub 方案。
 
 ### 4️⃣ 开始流畅写作
 
@@ -200,8 +203,9 @@ Markdown Image Flow: 设置推荐配置
 ## 🗺️ 发展路线图
 
 ### 🚀 即将到来
+- [ ] **Cloudinary 集成** - 专业 CDN 支持 (优先级：高)
+- [ ] **更多图床支持** - 替代 SM.MS 的稳定方案
 - [ ] **AI 智能标记** - 自动生成图片描述
-- [ ] **Cloudinary 集成** - 专业 CDN 支持
 - [ ] **批量处理** - 一键处理多张图片
 - [ ] **历史记录** - 上传历史管理
 
