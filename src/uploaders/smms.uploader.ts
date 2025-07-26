@@ -46,7 +46,7 @@ export class SMSUploader implements ImageUploader {
       console.log('MarkdownImageFlow: SM.MS Token配置:', token ? '已配置' : '未配置');
 
       const headers: Record<string, string> = {
-        'User-Agent': 'VSCode-ImageBedUploader/1.0',
+        'User-Agent': 'VSCode-MarkdownImageFlow/1.0',
         ...formData.getHeaders()
       };
 

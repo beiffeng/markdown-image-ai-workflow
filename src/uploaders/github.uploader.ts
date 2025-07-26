@@ -72,7 +72,7 @@ export class GitHubUploader implements ImageUploader {
         headers: {
           'Authorization': `token ${config.token}`,
           'Content-Type': 'application/json',
-          'User-Agent': 'VSCode-ImageBedUploader/1.0'
+          'User-Agent': 'VSCode-MarkdownImageFlow/1.0'
         },
         body: JSON.stringify(uploadData)
       });
@@ -157,7 +157,7 @@ export class GitHubUploader implements ImageUploader {
       const response = await fetch(url, {
         headers: {
           'Authorization': `token ${token}`,
-          'User-Agent': 'VSCode-ImageBedUploader/1.0'
+          'User-Agent': 'VSCode-MarkdownImageFlow/1.0'
         }
       });
 
@@ -219,7 +219,7 @@ export class GitHubUploader implements ImageUploader {
       const response = await fetch(url, {
         headers: {
           'Authorization': `token ${config.token}`,
-          'User-Agent': 'VSCode-ImageBedUploader/1.0'
+          'User-Agent': 'VSCode-MarkdownImageFlow/1.0'
         }
       });
 

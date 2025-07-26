@@ -40,7 +40,7 @@ export class UploaderFactory {
     try {
       return factory();
     } catch (error) {
-      console.error(`ImageBedUploader: 创建上传器 ${name} 失败:`, error);
+      console.error(`MarkdownImageFlow: 创建上传器 ${name} 失败:`, error);
       return null;
     }
   }
