@@ -48,6 +48,7 @@
               "github",
               "cos",
               "oss",
+              "qiniu",
               "smms",
               "cloudinary"
             ],
@@ -57,6 +58,7 @@
               "GitHub - 使用GitHub仓库作为图床（推荐）",
               "腾讯云COS - 腾讯云对象存储（适合国内用户）",
               "阿里云OSS - 阿里云对象存储（高性能，适合国内用户）",
+              "七牛云存储 - 七牛云对象存储（国内CDN优化，适合个人用户）",
               "SM.MS - 免费图床服务（已停止注册，不推荐）",
               "Cloudinary - 专业图片CDN服务"
             ]
@@ -191,9 +193,52 @@
         }
       },
       {
+        "id": "qiniu",
+        "title": "七牛云存储配置",
+        "order": 5,
+        "properties": {
+          "markdownImageAIWorkflow.qiniu.accessKey": {
+            "order": 1,
+            "type": "string",
+            "default": "",
+            "description": "🔐 七牛云访问密钥（AccessKey），可在控制台 -> 密钥管理获取"
+          },
+          "markdownImageAIWorkflow.qiniu.secretKey": {
+            "order": 2,
+            "type": "string",
+            "default": "",
+            "description": "🔒 七牛云私钥（SecretKey）"
+          },
+          "markdownImageAIWorkflow.qiniu.bucket": {
+            "order": 3,
+            "type": "string",
+            "default": "",
+            "description": "🪣 七牛云存储空间名称"
+          },
+          "markdownImageAIWorkflow.qiniu.domain": {
+            "order": 4,
+            "type": "string",
+            "default": "",
+            "description": "🌐 七牛云绑定的自定义域名或测试域名，如：example.com 或 xxxxx.bkt.clouddn.com"
+          },
+          "markdownImageAIWorkflow.qiniu.zone": {
+            "order": 5,
+            "type": "string",
+            "default": "z0",
+            "description": "🌏 七牛云存储区域：z0(华东)、z1(华北)、z2(华南)、na0(北美)、as0(东南亚)"
+          },
+          "markdownImageAIWorkflow.qiniu.path": {
+            "order": 6,
+            "type": "string",
+            "default": "images/",
+            "description": "📁 存储路径前缀（可选），如：images/、assets/ 等"
+          }
+        }
+      },
+      {
         "id": "smms",
         "title": "SM.MS配置",
-        "order": 5,
+        "order": 6,
         "properties": {
           "markdownImageAIWorkflow.smms.token": {
             "order": 1,
@@ -227,6 +272,7 @@
   "devDependencies": {
     "@types/ali-oss": "^6.16.11",
     "@types/node": "^24.1.0",
+    "@types/qiniu": "^6.1.0",
     "@types/vscode": "^1.102.0",
     "typescript": "^5.8.3"
   },
@@ -236,7 +282,8 @@
     "cos-nodejs-sdk-v5": "^2.16.0-beta.3",
     "form-data": "^4.0.4",
     "minimatch": "^10.0.3",
-    "node-fetch": "^3.3.2"
+    "node-fetch": "^3.3.2",
+    "qiniu": "^7.14.0"
   },
   "repository": {
     "type": "git",

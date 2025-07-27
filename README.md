@@ -23,6 +23,7 @@
 - **GitHub** - 私有仓库支持，完全掌控（推荐）
 - **腾讯云COS** - 国内用户首选，高速稳定
 - **阿里云OSS** - 高性能对象存储，适合国内用户
+- **七牛云存储** - CDN优化，免费额度，适合个人用户
 - **SM.MS** - 传统图床支持（已停止注册）
 - **Cloudinary** - 专业 CDN 服务（规划中）
 
@@ -91,6 +92,18 @@ Markdown Image AI Workflow: 设置推荐配置
 }
 ```
 
+#### ☁️ 七牛云存储（免费额度）
+```json
+{
+  "markdownImageAIWorkflow.provider": "qiniu",
+  "markdownImageAIWorkflow.qiniu.accessKey": "your-access-key",
+  "markdownImageAIWorkflow.qiniu.secretKey": "your-secret-key",
+  "markdownImageAIWorkflow.qiniu.bucket": "your-bucket",
+  "markdownImageAIWorkflow.qiniu.domain": "example.com",
+  "markdownImageAIWorkflow.qiniu.zone": "z0"
+}
+```
+
 #### ❌ SM.MS（不推荐，仅供已有用户）
 ```json
 {
@@ -126,7 +139,7 @@ Markdown Image AI Workflow: 设置推荐配置
   "markdownImageAIWorkflow.enabled": true,
   
   // 图床选择
-  "markdownImageAIWorkflow.provider": "smms", // "smms" | "github" | "cos" | "oss" | "cloudinary"
+  "markdownImageAIWorkflow.provider": "smms", // "smms" | "github" | "cos" | "oss" | "qiniu" | "cloudinary"
   
   // 处理策略  
   "markdownImageAIWorkflow.respectVSCodeConfig": true,
@@ -158,7 +171,14 @@ Markdown Image AI Workflow: 设置推荐配置
   "markdownImageAIWorkflow.oss.accessKeyId": "LTAI5t...",
   "markdownImageAIWorkflow.oss.accessKeySecret": "xxxxxxxxxxxxxxxx",
   "markdownImageAIWorkflow.oss.bucket": "bucket-name",
-  "markdownImageAIWorkflow.oss.region": "oss-cn-hangzhou"
+  "markdownImageAIWorkflow.oss.region": "oss-cn-hangzhou",
+  
+  // 七牛云存储 配置
+  "markdownImageAIWorkflow.qiniu.accessKey": "xxxxxxxxxxxxxxxx",
+  "markdownImageAIWorkflow.qiniu.secretKey": "xxxxxxxxxxxxxxxx",
+  "markdownImageAIWorkflow.qiniu.bucket": "bucket-name",
+  "markdownImageAIWorkflow.qiniu.domain": "example.com",
+  "markdownImageAIWorkflow.qiniu.zone": "z0"
 }
 ```
 
@@ -202,6 +222,7 @@ Markdown Image AI Workflow: 设置推荐配置
 | `🌊 GitHub` | 正常运行，使用 GitHub |
 | `🌊 腾讯云COS` | 正常运行，使用 腾讯云COS |
 | `🌊 阿里云OSS` | 正常运行，使用 阿里云OSS |
+| `🌊 七牛云存储` | 正常运行，使用 七牛云存储 |
 | `⚙️ 需要配置` | 配置不完整 |
 | `⏸️ 已禁用` | 插件已禁用 |
 | `✅ 上传成功` | 刚完成上传 |

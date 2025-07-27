@@ -88,7 +88,7 @@ export class PluginConfigReader {
     
     return {
       enabled: config.get<boolean>('enabled', true),
-      provider: config.get<'smms' | 'github' | 'cloudinary' | 'cos' | 'oss'>('provider', 'github'),
+      provider: config.get<'smms' | 'github' | 'cloudinary' | 'cos' | 'oss' | 'qiniu'>('provider', 'github'),
       respectVSCodeConfig: config.get<boolean>('respectVSCodeConfig', true),
       fallbackBehavior: config.get<'sameDirectory' | 'disable' | 'prompt'>('fallbackBehavior', 'sameDirectory'),
       deleteLocalAfterUpload: config.get<boolean>('deleteLocalAfterUpload', false),
@@ -113,6 +113,14 @@ export class PluginConfigReader {
         bucket: config.get<string>('oss.bucket', ''),
         region: config.get<string>('oss.region', 'oss-cn-hangzhou'),
         path: config.get<string>('oss.path', 'images/')
+      },
+      qiniu: {
+        accessKey: config.get<string>('qiniu.accessKey', ''),
+        secretKey: config.get<string>('qiniu.secretKey', ''),
+        bucket: config.get<string>('qiniu.bucket', ''),
+        domain: config.get<string>('qiniu.domain', ''),
+        zone: config.get<string>('qiniu.zone', 'z0'),
+        path: config.get<string>('qiniu.path', 'images/')
       }
     };
   }
@@ -171,6 +179,20 @@ export class PluginConfigReader {
         }
         if (!config.oss.region) {
           issues.push('阿里云OSS Region未配置');
+        }
+        break;
+      case 'qiniu':
+        if (!config.qiniu.accessKey) {
+          issues.push('七牛云存储AccessKey未配置');
+        }
+        if (!config.qiniu.secretKey) {
+          issues.push('七牛云存储SecretKey未配置');
+        }
+        if (!config.qiniu.bucket) {
+          issues.push('七牛云存储Bucket名称未配置');
+        }
+        if (!config.qiniu.domain) {
+          issues.push('七牛云存储Domain域名未配置');
         }
         break;
       case 'cloudinary':

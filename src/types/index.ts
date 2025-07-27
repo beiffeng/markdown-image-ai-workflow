@@ -13,7 +13,7 @@ export interface VSCodeMarkdownConfig {
  */
 export interface MarkdownImageAIWorkflowConfig {
   enabled: boolean;
-  provider: 'smms' | 'github' | 'cloudinary' | 'cos' | 'oss';
+  provider: 'smms' | 'github' | 'cloudinary' | 'cos' | 'oss' | 'qiniu';
   respectVSCodeConfig: boolean;
   fallbackBehavior: 'sameDirectory' | 'disable' | 'prompt';
   deleteLocalAfterUpload: boolean;
@@ -37,6 +37,14 @@ export interface MarkdownImageAIWorkflowConfig {
     accessKeySecret?: string;
     bucket?: string;
     region?: string;
+    path?: string;
+  };
+  qiniu: {
+    accessKey?: string;
+    secretKey?: string;
+    bucket?: string;
+    domain?: string;
+    zone?: string;
     path?: string;
   };
 }

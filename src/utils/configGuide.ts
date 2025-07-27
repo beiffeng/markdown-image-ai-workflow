@@ -119,6 +119,12 @@ export class ConfigurationGuide {
         provider: 'oss'
       },
       {
+        label: '$(cloud) 七牛云存储',
+        description: 'CDN优化，适合个人用户',
+        detail: '七牛云对象存储，国内CDN速度快，提供免费额度，需要配置AccessKey、SecretKey、Bucket和Domain',
+        provider: 'qiniu'
+      },
+      {
         label: '$(cloud) SM.MS',
         description: '⚠️ 不推荐（已停止注册）',
         detail: '已关闭新用户注册，仅供现有用户使用',
@@ -141,6 +147,8 @@ export class ConfigurationGuide {
         await this.configureCOS();
       } else if (choice.provider === 'oss') {
         await this.configureOSS();
+      } else if (choice.provider === 'qiniu') {
+        await this.configureQiniu();
       } else if (choice.provider === 'smms') {
         await this.configureSMMS();
       }
@@ -490,6 +498,159 @@ export class ConfigurationGuide {
     // 显示使用提示
     await vscode.window.showInformationMessage(
       `🎯 提示：图片将上传到 ${bucket}.${regionChoice.value}.aliyuncs.com/${pathPrefix || 'images/'}YYYY/MM/filename.ext`,
+      '了解了'
+    );
+  }
+
+  /**
+   * 配置七牛云存储
+   */
+  private async configureQiniu(): Promise<void> {
+    // 步骤1：输入AccessKey
+    const accessKey = await vscode.window.showInputBox({
+      title: '配置七牛云存储 - AccessKey',
+      prompt: '请输入七牛云访问密钥 (AccessKey)',
+      placeHolder: 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
+      ignoreFocusOut: true,
+      validateInput: (value) => {
+        if (!value || value.trim().length === 0) {
+          return 'AccessKey不能为空';
+        }
+        if (value.length < 20) {
+          return 'AccessKey格式不正确，长度太短';
+        }
+        return null;
+      }
+    });
+
+    if (!accessKey) return;
+
+    // 步骤2：输入SecretKey
+    const secretKey = await vscode.window.showInputBox({
+      title: '配置七牛云存储 - SecretKey',
+      prompt: '请输入七牛云私钥 (SecretKey)',
+      placeHolder: 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
+      password: true,
+      ignoreFocusOut: true,
+      validateInput: (value) => {
+        if (!value || value.trim().length === 0) {
+          return 'SecretKey不能为空';
+        }
+        if (value.length < 20) {
+          return 'SecretKey格式不正确，长度太短';
+        }
+        return null;
+      }
+    });
+
+    if (!secretKey) return;
+
+    // 步骤3：输入Bucket名称
+    const bucket = await vscode.window.showInputBox({
+      title: '配置七牛云存储 - Bucket',
+      prompt: '请输入七牛云存储空间名称',
+      placeHolder: 'my-bucket',
+      ignoreFocusOut: true,
+      validateInput: (value) => {
+        if (!value || value.trim().length === 0) {
+          return 'Bucket名称不能为空';
+        }
+        if (!/^[a-zA-Z0-9_-]+$/.test(value)) {
+          return 'Bucket名称只能包含字母、数字、下划线和短横线';
+        }
+        return null;
+      }
+    });
+
+    if (!bucket) return;
+
+    // 步骤4：输入Domain域名
+    const domain = await vscode.window.showInputBox({
+      title: '配置七牛云存储 - Domain',
+      prompt: '请输入七牛云绑定的域名（不含http://）',
+      placeHolder: 'example.com 或 xxxxx.bkt.clouddn.com',
+      ignoreFocusOut: true,
+      validateInput: (value) => {
+        if (!value || value.trim().length === 0) {
+          return 'Domain域名不能为空';
+        }
+        if (value.includes('http://') || value.includes('https://')) {
+          return 'Domain不需要包含协议前缀，只需要域名部分';
+        }
+        return null;
+      }
+    });
+
+    if (!domain) return;
+
+    // 步骤5：选择存储区域
+    const zones = [
+      { label: '华东 (z0) - 默认', value: 'z0' },
+      { label: '华北 (z1)', value: 'z1' },
+      { label: '华南 (z2)', value: 'z2' },
+      { label: '北美 (na0)', value: 'na0' },
+      { label: '东南亚 (as0)', value: 'as0' }
+    ];
+
+    const zoneChoice = await vscode.window.showQuickPick(zones, {
+      title: '选择七牛云存储区域',
+      placeHolder: '请选择存储空间所在的区域'
+    });
+
+    if (!zoneChoice) return;
+
+    // 步骤6：可选的路径前缀
+    const pathPrefix = await vscode.window.showInputBox({
+      title: '配置七牛云存储 - 路径前缀 (可选)',
+      prompt: '设置图片存储的路径前缀，留空则使用默认值',
+      placeHolder: 'images/ (推荐)',
+      value: 'images/',
+      ignoreFocusOut: true
+    });
+
+    // 保存配置
+    const config = vscode.workspace.getConfiguration('markdownImageAIWorkflow.qiniu');
+    await config.update('accessKey', accessKey, vscode.ConfigurationTarget.Global);
+    await config.update('secretKey', secretKey, vscode.ConfigurationTarget.Global);
+    await config.update('bucket', bucket, vscode.ConfigurationTarget.Global);
+    await config.update('domain', domain, vscode.ConfigurationTarget.Global);
+    await config.update('zone', zoneChoice.value, vscode.ConfigurationTarget.Global);
+    
+    if (pathPrefix !== undefined && pathPrefix.trim() !== '') {
+      await config.update('path', pathPrefix, vscode.ConfigurationTarget.Global);
+    }
+
+    // 测试配置
+    const testChoice = await vscode.window.showInformationMessage(
+      '✅ 七牛云存储配置已保存！是否要测试配置是否正确？',
+      '测试配置',
+      '跳过测试'
+    );
+
+    if (testChoice === '测试配置') {
+      try {
+        // 导入七牛云上传器进行测试
+        const { QiniuUploader } = require('../uploaders/qiniu.uploader');
+        const qiniuUploader = new QiniuUploader();
+        
+        vscode.window.showInformationMessage('🔄 正在测试七牛云配置...');
+        const validationResult = await qiniuUploader.validateConfig();
+        
+        if (validationResult.valid) {
+          vscode.window.showInformationMessage('✅ 七牛云配置测试成功！现在可以使用七牛云存储上传图片了');
+        } else {
+          vscode.window.showErrorMessage(`❌ 七牛云配置测试失败: ${validationResult.error}`);
+        }
+      } catch (error) {
+        vscode.window.showWarningMessage('⚠️ 无法测试配置，但配置已保存。请尝试上传图片验证功能');
+      }
+    } else {
+      vscode.window.showInformationMessage('✅ 七牛云存储配置完成！');
+    }
+
+    // 显示使用提示
+    await vscode.window.showInformationMessage(
+      `🎯 提示：图片将上传到 https://${domain}/${pathPrefix || 'images/'}YYYY/MM/filename.ext`,
       '了解了'
     );
   }

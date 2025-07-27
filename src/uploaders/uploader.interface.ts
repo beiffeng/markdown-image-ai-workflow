@@ -21,6 +21,7 @@ export class UploaderFactory {
     this.register('github', () => new (require('./github.uploader').GitHubUploader)());
     this.register('cos', () => new (require('./cos.uploader').COSUploader)());
     this.register('oss', () => new (require('./oss.uploader').OSSUploader)());
+    this.register('qiniu', () => new (require('./qiniu.uploader').QiniuUploader)());
   }
 
   /**
