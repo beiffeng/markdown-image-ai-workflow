@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 220" width="128" height="128">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 220" width="220" height="220">
   <!-- Background Circle -->
   <circle cx="110" cy="110" r="100" fill="url(#gradient)" stroke="#1E90FF" stroke-width="3" />
   
@@ -29,13 +29,10 @@
     <line x1="130" y1="70" x2="130" y2="150" stroke="#87CEFA" stroke-width="1" />
   </g>
   
-  <!-- AI Text as Paths -->
-  <g fill="#FFFFFF" transform="translate(110, 115)">
-    <!-- A letter path -->
-    <path d="M -15 15 L -10 -12 L -5 -12 L 0 15 L -5 15 L -6.5 5 L -8.5 5 L -10 15 Z M -8 -2 L -7 -2 L -7.5 -8 Z"/>
-    <!-- I letter path -->
-    <path d="M 5 -12 L 15 -12 L 15 -7 L 12 -7 L 12 10 L 15 10 L 15 15 L 5 15 L 5 10 L 8 10 L 8 -7 L 5 -7 Z"/>
-  </g>
+  <!-- AI Text -->
+  <text x="110" y="115" font-family="Arial, sans-serif" font-size="38" fill="#FFFFFF" text-anchor="middle" dominant-baseline="middle">
+    AI
+  </text>
   
   <!-- Line Paths Definition -->
   <defs>
@@ -43,13 +40,17 @@
     <path id="bottomArc" d="M 30 134 A 95 95 0 0 0 190 134" />
   </defs>
   
-  <!-- Markdown Text as simplified paths -->
-  <g fill="#FFFFFF" opacity="0.9">
-    <text x="110" y="55" font-family="Arial" font-size="18" text-anchor="middle">Markdown</text>
-  </g>
+  <!-- Markdown Text (Top Arc) -->
+  <text font-family="Arial, sans-serif" font-size="20" fill="#FFFFFF" letter-spacing="3">
+    <textPath href="#topArc" startOffset="50%" text-anchor="middle">
+      Markdown
+    </textPath>
+  </text>
   
-  <!-- Workflow Text as simplified paths -->
-  <g fill="#FFFFFF" opacity="0.9">
-    <text x="110" y="175" font-family="Arial" font-size="14" text-anchor="middle">Workflow</text>
-  </g>
+  <!-- Workflow Text (Bottom Arc) -->
+  <text font-family="Arial, sans-serif" font-size="16" fill="#FFFFFF" letter-spacing="4">
+    <textPath href="#bottomArc" startOffset="50%" text-anchor="middle">
+      Workflow
+    </textPath>
+  </text>
 </svg>
