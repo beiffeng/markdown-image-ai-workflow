@@ -9,7 +9,7 @@ export class ConfigurationGuide {
    */
   async showWelcomeGuide(): Promise<void> {
     const message = `
-🎉 欢迎使用 Markdown Image Flow！
+🎉 欢迎使用 Markdown Image AI Workflow！
 
 这个插件基于VSCode原生的 markdown.copyFiles.destination 特性，
 自动将粘贴的图片上传到图床并替换为远程链接。

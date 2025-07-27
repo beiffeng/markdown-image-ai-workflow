@@ -1,46 +1,46 @@
-# Markdown Image Flow
+# Markdown Image AI Workflow
 
-[![Version](https://img.shields.io/badge/version-0.1.0-blue.svg)](https://github.com/beiffeng/markdown-image-flow)
+[![Version](https://img.shields.io/badge/version-0.1.0-blue.svg)](https://github.com/beiffeng/markdown-image-ai-workflow)
 [![VSCode](https://img.shields.io/badge/VSCode-1.79+-green.svg)](https://code.visualstudio.com/)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
-> **让 Markdown 图片处理如流水般顺畅**  
-> 专为 Markdown 写作优化的多平台图片流程管理工具，支持智能上传、同步处理
+> **AI驱动的Markdown图片工作流管理专家**  
+> 专为Markdown写作打造的AI驱动图片工作流管理工具，集成智能上传、自动同步、多平台适配于一体的现代化解决方案
 
 ## ✨ 核心特性
 
-### 🌊 **流畅体验**
-- **一键粘贴** - 图片粘贴后自动处理，无需手动操作
-- **智能同步** - 多平台图床同步，数据永不丢失  
-- **无缝集成** - 完全基于 VSCode 原生特性，零学习成本
+### 🤖 **AI智能化**
+- **AI驱动处理** - 智能图片识别、自动路径生成、智能重命名
+- **工作流自动化** - 粘贴→处理→上传→替换全流程自动化  
+- **智能适配** - 根据项目类型自动选择最佳处理策略
 
-### 🎯 **智能化**
-- **路径智能解析** - 支持所有 VSCode 路径变量和复杂规则
-- **自动链接替换** - 精确匹配和替换 Markdown 图片引用
-- **光标智能定位** - 处理完成后自动定位到最佳位置
+### 🔄 **工作流管理**
+- **完整工作流** - 从图片获取到最终发布的端到端处理
+- **状态管理** - 实时监控每个步骤的处理状态
+- **错误恢复** - 智能故障检测和自动重试机制
 
-### 🚀 **多平台支持**
-- **SM.MS** - 零配置即用，稳定可靠
-- **GitHub** - 私有仓库支持，完全掌控
+### 🚀 **多平台生态**
+- **GitHub** - 私有仓库支持，完全掌控（推荐）
+- **腾讯云COS** - 国内用户首选，高速稳定
+- **SM.MS** - 传统图床支持（已停止注册）
 - **Cloudinary** - 专业 CDN 服务（规划中）
-- **更多平台** - 持续扩展中...
 
-### 🔮 **未来展望** 
-- **AI 智能标记** - 自动生成图片 alt text
-- **内容识别** - 基于图片内容智能分类
-- **多语言支持** - AI 驱动的多语言描述生成
+### 🔮 **AI增强特性** 
+- **智能标记** - AI自动生成图片alt text和描述
+- **内容识别** - 基于图片内容的智能分类和标签
+- **工作流优化** - AI学习用户习惯，优化处理流程
 
 ## 🚀 快速开始
 
 ### 1️⃣ 安装插件
 
-从 VSCode 扩展市场搜索 **"Markdown Image Flow"** 并安装。
+从 VSCode 扩展市场搜索 **"Markdown Image AI Workflow"** 并安装。
 
 ### 2️⃣ 配置图片流程（推荐）
 
 使用命令面板 (`Ctrl+Shift+P`) 运行：
 ```
-Markdown Image Flow: 设置推荐配置
+Markdown Image AI Workflow: 设置推荐配置
 ```
 
 或手动配置 VSCode 设置：
@@ -90,9 +90,9 @@ Markdown Image Flow: 设置推荐配置
 
 | 命令 | 功能 | 快捷键 |
 |------|------|--------|
-| `Markdown Image Flow: 检查配置` | 诊断配置问题 | - |
-| `Markdown Image Flow: 设置推荐配置` | 一键优化配置 | - |
-| `Markdown Image Flow: 上传当前图片` | 手动上传图片 | - |
+| `Markdown Image AI Workflow: 检查配置` | 诊断配置问题 | - |
+| `Markdown Image AI Workflow: 设置推荐配置` | 一键优化配置 | - |
+| `Markdown Image AI Workflow: 上传当前图片` | 手动上传图片 | - |
 
 ## ⚙️ 完整配置选项
 
@@ -219,9 +219,9 @@ Markdown Image Flow: 设置推荐配置
 
 我们欢迎任何形式的贡献！
 
-- 🐛 **报告问题** - [GitHub Issues](https://github.com/beiffeng/markdown-image-flow/issues)
-- 💡 **功能建议** - [GitHub Discussions](https://github.com/beiffeng/markdown-image-flow/discussions)
-- 🔧 **代码贡献** - [Pull Requests](https://github.com/beiffeng/markdown-image-flow/pulls)
+- 🐛 **报告问题** - [GitHub Issues](https://github.com/beiffeng/markdown-image-ai-workflow/issues)
+- 💡 **功能建议** - [GitHub Discussions](https://github.com/beiffeng/markdown-image-ai-workflow/discussions)
+- 🔧 **代码贡献** - [Pull Requests](https://github.com/beiffeng/markdown-image-ai-workflow/pulls)
 
 ## 📄 开源协议
 
@@ -237,8 +237,8 @@ Markdown Image Flow: 设置推荐配置
 
 <div align="center">
 
-**让 Markdown 写作更加流畅** ✨
+**AI驱动的Markdown图片工作流专家** ✨
 
-[⭐ Star](https://github.com/beiffeng/markdown-image-flow) | [🐛 报告问题](https://github.com/beiffeng/markdown-image-flow/issues) | [💬 讨论](https://github.com/beiffeng/markdown-image-flow/discussions)
+[⭐ Star](https://github.com/beiffeng/markdown-image-ai-workflow) | [🐛 报告问题](https://github.com/beiffeng/markdown-image-ai-workflow/issues) | [💬 讨论](https://github.com/beiffeng/markdown-image-ai-workflow/discussions)
 
 </div>

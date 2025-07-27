@@ -294,7 +294,7 @@ class MarkdownImageFlowExtension {
     ];
 
     const selection = await vscode.window.showQuickPick(items, {
-      title: 'Markdown Image Flow - 配置状态检查',
+      title: 'Markdown Image AI Workflow - 配置状态检查',
       placeHolder: '选择要查看或配置的项目'
     });
 
