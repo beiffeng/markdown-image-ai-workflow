@@ -107,6 +107,12 @@ export class ConfigurationGuide {
         provider: 'github'
       },
       {
+        label: '$(cloud) 腾讯云COS',
+        description: '适合国内用户',
+        detail: '腾讯云对象存储，访问速度快，需要配置SecretId、SecretKey和Bucket',
+        provider: 'cos'
+      },
+      {
         label: '$(cloud) SM.MS',
         description: '⚠️ 不推荐（已停止注册）',
         detail: '已关闭新用户注册，仅供现有用户使用',
@@ -125,6 +131,8 @@ export class ConfigurationGuide {
 
       if (choice.provider === 'github') {
         await this.configureGitHub();
+      } else if (choice.provider === 'cos') {
+        await this.configureCOS();
       } else if (choice.provider === 'smms') {
         await this.configureSMMS();
       }
@@ -188,6 +196,144 @@ export class ConfigurationGuide {
     } else {
       vscode.window.showInformationMessage('ℹ️ 建议使用GitHub作为图床方案，更稳定可靠');
     }
+  }
+
+  /**
+   * 配置腾讯云COS
+   */
+  private async configureCOS(): Promise<void> {
+    // 步骤1：输入SecretId
+    const secretId = await vscode.window.showInputBox({
+      title: '配置腾讯云COS - SecretId',
+      prompt: '请输入腾讯云API密钥ID (SecretId)',
+      placeHolder: 'AKxxxxxxxxxxxxxxxxxxxxxxxxxxx...',
+      ignoreFocusOut: true,
+      validateInput: (value) => {
+        if (!value || value.trim().length === 0) {
+          return 'SecretId不能为空';
+        }
+        if (value.length < 20) {
+          return 'SecretId格式不正确，长度太短';
+        }
+        return null;
+      }
+    });
+
+    if (!secretId) return;
+
+    // 步骤2：输入SecretKey
+    const secretKey = await vscode.window.showInputBox({
+      title: '配置腾讯云COS - SecretKey',
+      prompt: '请输入腾讯云API密钥Key (SecretKey)',
+      placeHolder: 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
+      password: true,
+      ignoreFocusOut: true,
+      validateInput: (value) => {
+        if (!value || value.trim().length === 0) {
+          return 'SecretKey不能为空';
+        }
+        if (value.length < 20) {
+          return 'SecretKey格式不正确，长度太短';
+        }
+        return null;
+      }
+    });
+
+    if (!secretKey) return;
+
+    // 步骤3：输入Bucket名称
+    const bucket = await vscode.window.showInputBox({
+      title: '配置腾讯云COS - Bucket',
+      prompt: '请输入COS存储桶名称',
+      placeHolder: 'my-bucket-1234567890',
+      ignoreFocusOut: true,
+      validateInput: (value) => {
+        if (!value || value.trim().length === 0) {
+          return 'Bucket名称不能为空';
+        }
+        if (!/^[a-zA-Z0-9.-]+-\d+$/.test(value)) {
+          return 'Bucket名称格式错误，应为 bucketname-appid 格式';
+        }
+        return null;
+      }
+    });
+
+    if (!bucket) return;
+
+    // 步骤4：选择地域
+    const regions = [
+      { label: '广州 (ap-guangzhou)', value: 'ap-guangzhou' },
+      { label: '上海 (ap-shanghai)', value: 'ap-shanghai' },
+      { label: '北京 (ap-beijing)', value: 'ap-beijing' },
+      { label: '成都 (ap-chengdu)', value: 'ap-chengdu' },
+      { label: '重庆 (ap-chongqing)', value: 'ap-chongqing' },
+      { label: '香港 (ap-hongkong)', value: 'ap-hongkong' },
+      { label: '新加坡 (ap-singapore)', value: 'ap-singapore' },
+      { label: '东京 (ap-tokyo)', value: 'ap-tokyo' },
+      { label: '硅谷 (na-siliconvalley)', value: 'na-siliconvalley' },
+      { label: '法兰克福 (eu-frankfurt)', value: 'eu-frankfurt' }
+    ];
+
+    const regionChoice = await vscode.window.showQuickPick(regions, {
+      title: '选择COS存储桶地域',
+      placeHolder: '请选择最接近您的地域以获得最佳访问速度'
+    });
+
+    if (!regionChoice) return;
+
+    // 步骤5：可选的路径前缀
+    const pathPrefix = await vscode.window.showInputBox({
+      title: '配置腾讯云COS - 路径前缀 (可选)',
+      prompt: '设置图片存储的路径前缀，留空则使用默认值',
+      placeHolder: 'images/ (推荐)',
+      value: 'images/',
+      ignoreFocusOut: true
+    });
+
+    // 保存配置
+    const config = vscode.workspace.getConfiguration('markdownImageFlow.cos');
+    await config.update('secretId', secretId, vscode.ConfigurationTarget.Global);
+    await config.update('secretKey', secretKey, vscode.ConfigurationTarget.Global);
+    await config.update('bucket', bucket, vscode.ConfigurationTarget.Global);
+    await config.update('region', regionChoice.value, vscode.ConfigurationTarget.Global);
+    
+    if (pathPrefix !== undefined && pathPrefix.trim() !== '') {
+      await config.update('path', pathPrefix, vscode.ConfigurationTarget.Global);
+    }
+
+    // 测试配置
+    const testChoice = await vscode.window.showInformationMessage(
+      '✅ 腾讯云COS配置已保存！是否要测试配置是否正确？',
+      '测试配置',
+      '跳过测试'
+    );
+
+    if (testChoice === '测试配置') {
+      try {
+        // 导入COS上传器进行测试
+        const { COSUploader } = require('../uploaders/cos.uploader');
+        const cosUploader = new COSUploader();
+        
+        vscode.window.showInformationMessage('🔄 正在测试COS配置...');
+        const validationResult = await cosUploader.validateConfig();
+        
+        if (validationResult.valid) {
+          vscode.window.showInformationMessage('✅ COS配置测试成功！现在可以使用腾讯云COS上传图片了');
+        } else {
+          vscode.window.showErrorMessage(`❌ COS配置测试失败: ${validationResult.error}`);
+        }
+      } catch (error) {
+        vscode.window.showWarningMessage('⚠️ 无法测试配置，但配置已保存。请尝试上传图片验证功能');
+      }
+    } else {
+      vscode.window.showInformationMessage('✅ 腾讯云COS配置完成！');
+    }
+
+    // 显示使用提示
+    await vscode.window.showInformationMessage(
+      `🎯 提示：图片将上传到 ${bucket}.cos.${regionChoice.value}.myqcloud.com/${pathPrefix || 'images/'}YYYY/MM/filename.ext`,
+      '了解了'
+    );
   }
 
   /**

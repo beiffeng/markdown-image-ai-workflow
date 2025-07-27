@@ -37,11 +37,17 @@
         },
         "markdownImageFlow.provider": {
           "type": "string",
-          "enum": ["github", "smms", "cloudinary"],
+          "enum": [
+            "github",
+            "cos",
+            "smms",
+            "cloudinary"
+          ],
           "default": "github",
           "description": "图床服务提供商",
           "enumDescriptions": [
             "GitHub - 使用GitHub仓库作为图床（推荐）",
+            "腾讯云COS - 腾讯云对象存储（适合国内用户）",
             "SM.MS - 免费图床服务（已停止注册，不推荐）",
             "Cloudinary - 专业图片CDN服务"
           ]
@@ -53,7 +59,11 @@
         },
         "markdownImageFlow.fallbackBehavior": {
           "type": "string",
-          "enum": ["sameDirectory", "disable", "prompt"],
+          "enum": [
+            "sameDirectory",
+            "disable",
+            "prompt"
+          ],
           "default": "sameDirectory",
           "description": "当未配置markdown.copyFiles.destination时的处理方式",
           "enumDescriptions": [
@@ -86,6 +96,31 @@
           "type": "boolean",
           "default": false,
           "description": "上传成功后删除本地图片文件"
+        },
+        "markdownImageFlow.cos.secretId": {
+          "type": "string",
+          "default": "",
+          "description": "腾讯云API密钥ID（可在控制台 -> 访问管理 -> API密钥管理获取）"
+        },
+        "markdownImageFlow.cos.secretKey": {
+          "type": "string",
+          "default": "",
+          "description": "腾讯云API密钥Key"
+        },
+        "markdownImageFlow.cos.bucket": {
+          "type": "string",
+          "default": "",
+          "description": "腾讯云COS存储桶名称，格式：bucketname-appid"
+        },
+        "markdownImageFlow.cos.region": {
+          "type": "string",
+          "default": "ap-guangzhou",
+          "description": "腾讯云COS存储桶地域，如：ap-guangzhou、ap-shanghai、ap-beijing等"
+        },
+        "markdownImageFlow.cos.path": {
+          "type": "string",
+          "default": "images/",
+          "description": "COS存储路径前缀（可选），如：images/、assets/ 等"
         }
       }
     },
@@ -110,15 +145,16 @@
     "watch": "tsc -watch -p ./"
   },
   "devDependencies": {
-    "@types/vscode": "^1.102.0",
     "@types/node": "^24.1.0",
+    "@types/vscode": "^1.102.0",
     "typescript": "^5.8.3"
   },
   "dependencies": {
     "axios": "^1.11.0",
+    "cos-nodejs-sdk-v5": "^2.16.0-beta.3",
+    "form-data": "^4.0.4",
     "minimatch": "^10.0.3",
-    "node-fetch": "^3.3.2",
-    "form-data": "^4.0.4"
+    "node-fetch": "^3.3.2"
   },
   "repository": {
     "type": "git",

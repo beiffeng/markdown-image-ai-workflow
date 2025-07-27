@@ -19,6 +19,7 @@ export class UploaderFactory {
     // 注册内置上传器
     this.register('smms', () => new (require('./smms.uploader').SMSUploader)());
     this.register('github', () => new (require('./github.uploader').GitHubUploader)());
+    this.register('cos', () => new (require('./cos.uploader').COSUploader)());
   }
 
   /**

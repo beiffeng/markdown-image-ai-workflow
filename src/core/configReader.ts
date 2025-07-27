@@ -88,7 +88,7 @@ export class PluginConfigReader {
     
     return {
       enabled: config.get<boolean>('enabled', true),
-      provider: config.get<'smms' | 'github' | 'cloudinary'>('provider', 'github'),
+      provider: config.get<'smms' | 'github' | 'cloudinary' | 'cos'>('provider', 'github'),
       respectVSCodeConfig: config.get<boolean>('respectVSCodeConfig', true),
       fallbackBehavior: config.get<'sameDirectory' | 'disable' | 'prompt'>('fallbackBehavior', 'sameDirectory'),
       deleteLocalAfterUpload: config.get<boolean>('deleteLocalAfterUpload', false),
@@ -99,6 +99,13 @@ export class PluginConfigReader {
         repo: config.get<string>('github.repo', ''),
         token: config.get<string>('github.token', ''),
         branch: config.get<string>('github.branch', 'main')
+      },
+      cos: {
+        secretId: config.get<string>('cos.secretId', ''),
+        secretKey: config.get<string>('cos.secretKey', ''),
+        bucket: config.get<string>('cos.bucket', ''),
+        region: config.get<string>('cos.region', 'ap-guangzhou'),
+        path: config.get<string>('cos.path', 'images/')
       }
     };
   }
@@ -129,6 +136,20 @@ export class PluginConfigReader {
         }
         if (!config.github.token) {
           issues.push('GitHub Personal Access Token未配置');
+        }
+        break;
+      case 'cos':
+        if (!config.cos.secretId) {
+          issues.push('腾讯云COS SecretId未配置');
+        }
+        if (!config.cos.secretKey) {
+          issues.push('腾讯云COS SecretKey未配置');
+        }
+        if (!config.cos.bucket) {
+          issues.push('腾讯云COS Bucket名称未配置');
+        }
+        if (!config.cos.region) {
+          issues.push('腾讯云COS Region未配置');
         }
         break;
       case 'cloudinary':

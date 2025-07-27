@@ -13,7 +13,7 @@ export interface VSCodeMarkdownConfig {
  */
 export interface MarkdownImageFlowConfig {
   enabled: boolean;
-  provider: 'smms' | 'github' | 'cloudinary';
+  provider: 'smms' | 'github' | 'cloudinary' | 'cos';
   respectVSCodeConfig: boolean;
   fallbackBehavior: 'sameDirectory' | 'disable' | 'prompt';
   deleteLocalAfterUpload: boolean;
@@ -24,6 +24,13 @@ export interface MarkdownImageFlowConfig {
     repo?: string;
     token?: string;
     branch: string;
+  };
+  cos: {
+    secretId?: string;
+    secretKey?: string;
+    bucket?: string;
+    region?: string;
+    path?: string;
   };
 }
 
