@@ -33,7 +33,8 @@
         "markdownImageFlow.enabled": {
           "type": "boolean",
           "default": true,
-          "description": "启用自动图床上传（需要先配置VSCode的markdown.copyFiles.destination）"
+          "description": "✨ 启用自动图床上传（需要先配置VSCode的markdown.copyFiles.destination）",
+          "order": 1
         },
         "markdownImageFlow.provider": {
           "type": "string",
@@ -44,18 +45,20 @@
             "cloudinary"
           ],
           "default": "github",
-          "description": "图床服务提供商",
+          "description": "🏠 图床服务提供商",
           "enumDescriptions": [
             "GitHub - 使用GitHub仓库作为图床（推荐）",
             "腾讯云COS - 腾讯云对象存储（适合国内用户）",
             "SM.MS - 免费图床服务（已停止注册，不推荐）",
             "Cloudinary - 专业图片CDN服务"
-          ]
+          ],
+          "order": 2
         },
         "markdownImageFlow.respectVSCodeConfig": {
           "type": "boolean",
           "default": true,
-          "description": "严格遵循VSCode原生markdown.copyFiles.destination配置"
+          "description": "⚙️ 严格遵循VSCode原生markdown.copyFiles.destination配置",
+          "order": 3
         },
         "markdownImageFlow.fallbackBehavior": {
           "type": "string",
@@ -65,62 +68,73 @@
             "prompt"
           ],
           "default": "sameDirectory",
-          "description": "当未配置markdown.copyFiles.destination时的处理方式",
+          "description": "🔄 当未配置markdown.copyFiles.destination时的处理方式",
           "enumDescriptions": [
             "同级目录 - 监控markdown文件同级目录的图片",
             "禁用 - 不处理图片上传",
             "提示 - 提示用户配置markdown.copyFiles.destination"
-          ]
-        },
-        "markdownImageFlow.smms.token": {
-          "type": "string",
-          "default": "",
-          "description": "SM.MS API Token（可选，有助于提高上传限制）"
-        },
-        "markdownImageFlow.github.repo": {
-          "type": "string",
-          "default": "",
-          "description": "GitHub仓库名称，格式：username/repo"
-        },
-        "markdownImageFlow.github.token": {
-          "type": "string",
-          "default": "",
-          "description": "GitHub Personal Access Token"
-        },
-        "markdownImageFlow.github.branch": {
-          "type": "string",
-          "default": "main",
-          "description": "GitHub仓库分支名称"
+          ],
+          "order": 4
         },
         "markdownImageFlow.deleteLocalAfterUpload": {
           "type": "boolean",
           "default": false,
-          "description": "上传成功后删除本地图片文件"
+          "description": "🗑️ 上传成功后删除本地图片文件",
+          "order": 5
+        },
+        "markdownImageFlow.github.repo": {
+          "type": "string",
+          "default": "",
+          "description": "📦 GitHub仓库名称，格式：username/repo",
+          "order": 10
+        },
+        "markdownImageFlow.github.token": {
+          "type": "string",
+          "default": "",
+          "description": "🔑 GitHub Personal Access Token",
+          "order": 11
+        },
+        "markdownImageFlow.github.branch": {
+          "type": "string",
+          "default": "main",
+          "description": "🌿 GitHub仓库分支名称",
+          "order": 12
         },
         "markdownImageFlow.cos.secretId": {
           "type": "string",
           "default": "",
-          "description": "腾讯云API密钥ID（可在控制台 -> 访问管理 -> API密钥管理获取）"
+          "description": "🔐 腾讯云API密钥ID（可在控制台 -> 访问管理 -> API密钥管理获取）",
+          "order": 20
         },
         "markdownImageFlow.cos.secretKey": {
           "type": "string",
           "default": "",
-          "description": "腾讯云API密钥Key"
+          "description": "🔒 腾讯云API密钥Key",
+          "order": 21
         },
         "markdownImageFlow.cos.bucket": {
           "type": "string",
           "default": "",
-          "description": "腾讯云COS存储桶名称，格式：bucketname-appid"
+          "description": "🪣 腾讯云COS存储桶名称，格式：bucketname-appid",
+          "order": 22
         },
         "markdownImageFlow.cos.region": {
           "type": "string",
           "default": "ap-guangzhou",
-          "description": "腾讯云COS存储桶地域，如：ap-guangzhou、ap-shanghai、ap-beijing等"
+          "description": "🌏 腾讯云COS存储桶地域，如：ap-guangzhou、ap-shanghai、ap-beijing等",
+          "order": 23
         },
         "markdownImageFlow.cos.path": {
           "type": "string",
           "default": "images/",
-          "description": "COS存储路径前缀（可选），如：images/、assets/ 等"
+          "description": "📁 COS存储路径前缀（可选），如：images/、assets/ 等",
+          "order": 24
+        },
+        "markdownImageFlow.smms.token": {
+          "type": "string",
+          "default": "",
+          "description": "🎫 SM.MS API Token（已停止注册，不推荐使用）",
+          "order": 30
         }
       }
     },
