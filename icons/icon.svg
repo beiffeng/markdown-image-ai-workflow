@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="128" height="128" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- 主体蓝色渐变 -->
+    <linearGradient id="mainGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1e3a8a;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#3b82f6;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- 流动线条渐变 -->
+    <linearGradient id="flowGradient" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#60a5fa;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- AI元素金色渐变 -->
+    <radialGradient id="aiGradient" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#fbbf24;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#f59e0b;stop-opacity:1" />
+    </radialGradient>
+  </defs>
+  
+  <!-- 背景圆角方形 -->
+  <rect x="8" y="8" width="112" height="112" rx="20" ry="20" 
+        fill="url(#mainGradient)" opacity="0.1"/>
+  
+  <!-- 主体M字母 -->
+  <path d="M 25 40 L 25 88 L 35 88 L 35 58 L 50 78 L 55 78 L 70 58 L 70 88 L 80 88 L 80 40 L 68 40 L 52.5 65 L 37 40 Z" 
+        fill="url(#mainGradient)" 
+        stroke="none"/>
+  
+  <!-- 流动线条 - 从M延伸的workflow曲线 -->
+  <path d="M 80 50 Q 90 40, 100 35 Q 105 32, 108 28" 
+        stroke="url(#flowGradient)" 
+        stroke-width="3" 
+        fill="none" 
+        stroke-linecap="round"/>
+  
+  <path d="M 85 60 Q 95 50, 105 45 Q 110 42, 113 38" 
+        stroke="url(#flowGradient)" 
+        stroke-width="2" 
+        fill="none" 
+        stroke-linecap="round" 
+        opacity="0.7"/>
+  
+  <!-- AI智能元素 - 六角星 -->
+  <g transform="translate(100, 30)">
+    <polygon points="0,-8 4,-4 8,0 4,4 0,8 -4,4 -8,0 -4,-4" 
+             fill="url(#aiGradient)" 
+             opacity="0.9"/>
+    <!-- 内部小点 -->
+    <circle cx="0" cy="0" r="2" fill="#ffffff" opacity="0.8"/>
+  </g>
+  
+  <!-- 辅助AI元素 - 小圆点 -->
+  <circle cx="110" cy="50" r="1.5" fill="url(#aiGradient)" opacity="0.6"/>
+  <circle cx="105" cy="60" r="1" fill="url(#aiGradient)" opacity="0.4"/>
+  
+  <!-- 额外的科技感装饰线条 -->
+  <line x1="25" y1="92" x2="45" y2="92" 
+        stroke="url(#flowGradient)" 
+        stroke-width="1" 
+        opacity="0.5"/>
+  
+  <line x1="55" y1="92" x2="75" y2="92" 
+        stroke="url(#flowGradient)" 
+        stroke-width="1" 
+        opacity="0.5"/>
+</svg>
