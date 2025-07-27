@@ -7,13 +7,13 @@
 ### 1. 检查控制台日志
 打开VSCode开发者控制台，查看以下关键日志：
 ```
-MarkdownImageFlow: 初始化COS客户端...
-MarkdownImageFlow: 开始上传到COS: images/2025/01/filename.png
-MarkdownImageFlow: 检查文件是否存在: images/2025/01/filename.png
-MarkdownImageFlow: 文件不存在，可以上传
-MarkdownImageFlow: 准备上传文件: {...}
-MarkdownImageFlow: COS上传进度: 100%
-MarkdownImageFlow: COS上传成功详情: {...}
+MarkdownImageAIWorkflow: 初始化COS客户端...
+MarkdownImageAIWorkflow: 开始上传到COS: images/2025/01/filename.png
+MarkdownImageAIWorkflow: 检查文件是否存在: images/2025/01/filename.png
+MarkdownImageAIWorkflow: 文件不存在，可以上传
+MarkdownImageAIWorkflow: 准备上传文件: {...}
+MarkdownImageAIWorkflow: COS上传进度: 100%
+MarkdownImageAIWorkflow: COS上传成功详情: {...}
 ```
 
 ### 2. 常见错误和解决方案
