@@ -43,18 +43,28 @@
         stroke-linecap="round" 
         opacity="0.7"/>
   
-  <!-- AI智能元素 - 六角星 -->
-  <g transform="translate(100, 30)">
-    <polygon points="0,-8 4,-4 8,0 4,4 0,8 -4,4 -8,0 -4,-4" 
-             fill="url(#aiGradient)" 
-             opacity="0.9"/>
-    <!-- 内部小点 -->
-    <circle cx="0" cy="0" r="2" fill="#ffffff" opacity="0.8"/>
+  <!-- AI智能标记 - 圆形徽章 + AI文字 -->
+  <g transform="translate(95, 25)">
+    <!-- 圆形背景徽章 -->
+    <circle cx="0" cy="0" r="12" 
+            fill="url(#aiGradient)" 
+            opacity="0.9"
+            stroke="#ffffff" 
+            stroke-width="0.5"/>
+    
+    <!-- AI文字 -->
+    <text x="0" y="2" 
+          text-anchor="middle" 
+          font-family="Arial, sans-serif" 
+          font-size="9" 
+          font-weight="bold" 
+          fill="#ffffff" 
+          opacity="0.95">AI</text>
   </g>
   
-  <!-- 辅助AI元素 - 小圆点 -->
-  <circle cx="110" cy="50" r="1.5" fill="url(#aiGradient)" opacity="0.6"/>
-  <circle cx="105" cy="60" r="1" fill="url(#aiGradient)" opacity="0.4"/>
+  <!-- 辅助AI元素 - 小光点装饰 -->
+  <circle cx="105" cy="45" r="1" fill="url(#aiGradient)" opacity="0.5"/>
+  <circle cx="110" cy="50" r="0.8" fill="url(#aiGradient)" opacity="0.4"/>
   
   <!-- 额外的科技感装饰线条 -->
   <line x1="25" y1="92" x2="45" y2="92" 
