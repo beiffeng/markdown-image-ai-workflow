@@ -88,7 +88,7 @@ export class PluginConfigReader {
     
     return {
       enabled: config.get<boolean>('enabled', true),
-      provider: config.get<'smms' | 'github' | 'cloudinary' | 'cos'>('provider', 'github'),
+      provider: config.get<'smms' | 'github' | 'cloudinary' | 'cos' | 'oss'>('provider', 'github'),
       respectVSCodeConfig: config.get<boolean>('respectVSCodeConfig', true),
       fallbackBehavior: config.get<'sameDirectory' | 'disable' | 'prompt'>('fallbackBehavior', 'sameDirectory'),
       deleteLocalAfterUpload: config.get<boolean>('deleteLocalAfterUpload', false),
@@ -106,6 +106,13 @@ export class PluginConfigReader {
         bucket: config.get<string>('cos.bucket', ''),
         region: config.get<string>('cos.region', 'ap-guangzhou'),
         path: config.get<string>('cos.path', 'images/')
+      },
+      oss: {
+        accessKeyId: config.get<string>('oss.accessKeyId', ''),
+        accessKeySecret: config.get<string>('oss.accessKeySecret', ''),
+        bucket: config.get<string>('oss.bucket', ''),
+        region: config.get<string>('oss.region', 'oss-cn-hangzhou'),
+        path: config.get<string>('oss.path', 'images/')
       }
     };
   }
@@ -150,6 +157,20 @@ export class PluginConfigReader {
         }
         if (!config.cos.region) {
           issues.push('腾讯云COS Region未配置');
+        }
+        break;
+      case 'oss':
+        if (!config.oss.accessKeyId) {
+          issues.push('阿里云OSS AccessKeyId未配置');
+        }
+        if (!config.oss.accessKeySecret) {
+          issues.push('阿里云OSS AccessKeySecret未配置');
+        }
+        if (!config.oss.bucket) {
+          issues.push('阿里云OSS Bucket名称未配置');
+        }
+        if (!config.oss.region) {
+          issues.push('阿里云OSS Region未配置');
         }
         break;
       case 'cloudinary':

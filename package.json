@@ -47,6 +47,7 @@
             "enum": [
               "github",
               "cos",
+              "oss",
               "smms",
               "cloudinary"
             ],
@@ -55,6 +56,7 @@
             "enumDescriptions": [
               "GitHub - 使用GitHub仓库作为图床（推荐）",
               "腾讯云COS - 腾讯云对象存储（适合国内用户）",
+              "阿里云OSS - 阿里云对象存储（高性能，适合国内用户）",
               "SM.MS - 免费图床服务（已停止注册，不推荐）",
               "Cloudinary - 专业图片CDN服务"
             ]
@@ -152,9 +154,46 @@
         }
       },
       {
+        "id": "oss",
+        "title": "阿里云OSS配置",
+        "order": 4,
+        "properties": {
+          "markdownImageAIWorkflow.oss.accessKeyId": {
+            "order": 1,
+            "type": "string",
+            "default": "",
+            "description": "🔐 阿里云访问密钥ID（可在控制台 -> 访问控制 -> 用户管理 -> AccessKey管理获取）"
+          },
+          "markdownImageAIWorkflow.oss.accessKeySecret": {
+            "order": 2,
+            "type": "string",
+            "default": "",
+            "description": "🔒 阿里云访问密钥Secret"
+          },
+          "markdownImageAIWorkflow.oss.bucket": {
+            "order": 3,
+            "type": "string",
+            "default": "",
+            "description": "🪣 阿里云OSS存储桶名称"
+          },
+          "markdownImageAIWorkflow.oss.region": {
+            "order": 4,
+            "type": "string",
+            "default": "oss-cn-hangzhou",
+            "description": "🌏 阿里云OSS存储桶地域，如：oss-cn-hangzhou、oss-cn-shanghai、oss-cn-beijing等"
+          },
+          "markdownImageAIWorkflow.oss.path": {
+            "order": 5,
+            "type": "string",
+            "default": "images/",
+            "description": "📁 OSS存储路径前缀（可选），如：images/、assets/ 等"
+          }
+        }
+      },
+      {
         "id": "smms",
         "title": "SM.MS配置",
-        "order": 4,
+        "order": 5,
         "properties": {
           "markdownImageAIWorkflow.smms.token": {
             "order": 1,
@@ -186,11 +225,13 @@
     "watch": "tsc -watch -p ./"
   },
   "devDependencies": {
+    "@types/ali-oss": "^6.16.11",
     "@types/node": "^24.1.0",
     "@types/vscode": "^1.102.0",
     "typescript": "^5.8.3"
   },
   "dependencies": {
+    "ali-oss": "^6.23.0",
     "axios": "^1.11.0",
     "cos-nodejs-sdk-v5": "^2.16.0-beta.3",
     "form-data": "^4.0.4",

@@ -20,6 +20,7 @@ export class UploaderFactory {
     this.register('smms', () => new (require('./smms.uploader').SMSUploader)());
     this.register('github', () => new (require('./github.uploader').GitHubUploader)());
     this.register('cos', () => new (require('./cos.uploader').COSUploader)());
+    this.register('oss', () => new (require('./oss.uploader').OSSUploader)());
   }
 
   /**

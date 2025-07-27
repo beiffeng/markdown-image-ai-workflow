@@ -113,6 +113,12 @@ export class ConfigurationGuide {
         provider: 'cos'
       },
       {
+        label: '$(cloud) 阿里云OSS',
+        description: '高性能，适合国内用户',
+        detail: '阿里云对象存储，性能优异，需要配置AccessKeyId、AccessKeySecret和Bucket',
+        provider: 'oss'
+      },
+      {
         label: '$(cloud) SM.MS',
         description: '⚠️ 不推荐（已停止注册）',
         detail: '已关闭新用户注册，仅供现有用户使用',
@@ -133,6 +139,8 @@ export class ConfigurationGuide {
         await this.configureGitHub();
       } else if (choice.provider === 'cos') {
         await this.configureCOS();
+      } else if (choice.provider === 'oss') {
+        await this.configureOSS();
       } else if (choice.provider === 'smms') {
         await this.configureSMMS();
       }
@@ -332,6 +340,156 @@ export class ConfigurationGuide {
     // 显示使用提示
     await vscode.window.showInformationMessage(
       `🎯 提示：图片将上传到 ${bucket}.cos.${regionChoice.value}.myqcloud.com/${pathPrefix || 'images/'}YYYY/MM/filename.ext`,
+      '了解了'
+    );
+  }
+
+  /**
+   * 配置阿里云OSS
+   */
+  private async configureOSS(): Promise<void> {
+    // 步骤1：输入AccessKeyId
+    const accessKeyId = await vscode.window.showInputBox({
+      title: '配置阿里云OSS - AccessKeyId',
+      prompt: '请输入阿里云访问密钥ID (AccessKeyId)',
+      placeHolder: 'LTAI5t...',
+      ignoreFocusOut: true,
+      validateInput: (value) => {
+        if (!value || value.trim().length === 0) {
+          return 'AccessKeyId不能为空';
+        }
+        if (value.length < 16) {
+          return 'AccessKeyId格式不正确，长度太短';
+        }
+        return null;
+      }
+    });
+
+    if (!accessKeyId) return;
+
+    // 步骤2：输入AccessKeySecret
+    const accessKeySecret = await vscode.window.showInputBox({
+      title: '配置阿里云OSS - AccessKeySecret',
+      prompt: '请输入阿里云访问密钥Secret (AccessKeySecret)',
+      placeHolder: 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
+      password: true,
+      ignoreFocusOut: true,
+      validateInput: (value) => {
+        if (!value || value.trim().length === 0) {
+          return 'AccessKeySecret不能为空';
+        }
+        if (value.length < 20) {
+          return 'AccessKeySecret格式不正确，长度太短';
+        }
+        return null;
+      }
+    });
+
+    if (!accessKeySecret) return;
+
+    // 步骤3：输入Bucket名称
+    const bucket = await vscode.window.showInputBox({
+      title: '配置阿里云OSS - Bucket',
+      prompt: '请输入OSS存储桶名称',
+      placeHolder: 'my-bucket',
+      ignoreFocusOut: true,
+      validateInput: (value) => {
+        if (!value || value.trim().length === 0) {
+          return 'Bucket名称不能为空';
+        }
+        if (!/^[a-z0-9]([a-z0-9-]*[a-z0-9])?$/.test(value)) {
+          return 'Bucket名称格式错误，只能包含小写字母、数字和短横线，且不能以短横线开头或结尾';
+        }
+        return null;
+      }
+    });
+
+    if (!bucket) return;
+
+    // 步骤4：选择地域
+    const regions = [
+      { label: '杭州 (oss-cn-hangzhou)', value: 'oss-cn-hangzhou' },
+      { label: '上海 (oss-cn-shanghai)', value: 'oss-cn-shanghai' },
+      { label: '北京 (oss-cn-beijing)', value: 'oss-cn-beijing' },
+      { label: '深圳 (oss-cn-shenzhen)', value: 'oss-cn-shenzhen' },
+      { label: '广州 (oss-cn-guangzhou)', value: 'oss-cn-guangzhou' },
+      { label: '成都 (oss-cn-chengdu)', value: 'oss-cn-chengdu' },
+      { label: '青岛 (oss-cn-qingdao)', value: 'oss-cn-qingdao' },
+      { label: '张家口 (oss-cn-zhangjiakou)', value: 'oss-cn-zhangjiakou' },
+      { label: '呼和浩特 (oss-cn-huhehaote)', value: 'oss-cn-huhehaote' },
+      { label: '乌兰察布 (oss-cn-wulanchabu)', value: 'oss-cn-wulanchabu' },
+      { label: '香港 (oss-cn-hongkong)', value: 'oss-cn-hongkong' },
+      { label: '新加坡 (oss-ap-southeast-1)', value: 'oss-ap-southeast-1' },
+      { label: '悉尼 (oss-ap-southeast-2)', value: 'oss-ap-southeast-2' },
+      { label: '吉隆坡 (oss-ap-southeast-3)', value: 'oss-ap-southeast-3' },
+      { label: '雅加达 (oss-ap-southeast-5)', value: 'oss-ap-southeast-5' },
+      { label: '东京 (oss-ap-northeast-1)', value: 'oss-ap-northeast-1' },
+      { label: '孟买 (oss-ap-south-1)', value: 'oss-ap-south-1' },
+      { label: '硅谷 (oss-us-west-1)', value: 'oss-us-west-1' },
+      { label: '弗吉尼亚 (oss-us-east-1)', value: 'oss-us-east-1' },
+      { label: '法兰克福 (oss-eu-central-1)', value: 'oss-eu-central-1' },
+      { label: '伦敦 (oss-eu-west-1)', value: 'oss-eu-west-1' },
+      { label: '迪拜 (oss-me-east-1)', value: 'oss-me-east-1' }
+    ];
+
+    const regionChoice = await vscode.window.showQuickPick(regions, {
+      title: '选择OSS存储桶地域',
+      placeHolder: '请选择最接近您的地域以获得最佳访问速度'
+    });
+
+    if (!regionChoice) return;
+
+    // 步骤5：可选的路径前缀
+    const pathPrefix = await vscode.window.showInputBox({
+      title: '配置阿里云OSS - 路径前缀 (可选)',
+      prompt: '设置图片存储的路径前缀，留空则使用默认值',
+      placeHolder: 'images/ (推荐)',
+      value: 'images/',
+      ignoreFocusOut: true
+    });
+
+    // 保存配置
+    const config = vscode.workspace.getConfiguration('markdownImageAIWorkflow.oss');
+    await config.update('accessKeyId', accessKeyId, vscode.ConfigurationTarget.Global);
+    await config.update('accessKeySecret', accessKeySecret, vscode.ConfigurationTarget.Global);
+    await config.update('bucket', bucket, vscode.ConfigurationTarget.Global);
+    await config.update('region', regionChoice.value, vscode.ConfigurationTarget.Global);
+    
+    if (pathPrefix !== undefined && pathPrefix.trim() !== '') {
+      await config.update('path', pathPrefix, vscode.ConfigurationTarget.Global);
+    }
+
+    // 测试配置
+    const testChoice = await vscode.window.showInformationMessage(
+      '✅ 阿里云OSS配置已保存！是否要测试配置是否正确？',
+      '测试配置',
+      '跳过测试'
+    );
+
+    if (testChoice === '测试配置') {
+      try {
+        // 导入OSS上传器进行测试
+        const { OSSUploader } = require('../uploaders/oss.uploader');
+        const ossUploader = new OSSUploader();
+        
+        vscode.window.showInformationMessage('🔄 正在测试OSS配置...');
+        const validationResult = await ossUploader.validateConfig();
+        
+        if (validationResult.valid) {
+          vscode.window.showInformationMessage('✅ OSS配置测试成功！现在可以使用阿里云OSS上传图片了');
+        } else {
+          vscode.window.showErrorMessage(`❌ OSS配置测试失败: ${validationResult.error}`);
+        }
+      } catch (error) {
+        vscode.window.showWarningMessage('⚠️ 无法测试配置，但配置已保存。请尝试上传图片验证功能');
+      }
+    } else {
+      vscode.window.showInformationMessage('✅ 阿里云OSS配置完成！');
+    }
+
+    // 显示使用提示
+    await vscode.window.showInformationMessage(
+      `🎯 提示：图片将上传到 ${bucket}.${regionChoice.value}.aliyuncs.com/${pathPrefix || 'images/'}YYYY/MM/filename.ext`,
       '了解了'
     );
   }
