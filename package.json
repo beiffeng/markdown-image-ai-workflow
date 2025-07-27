@@ -37,12 +37,12 @@
         },
         "markdownImageFlow.provider": {
           "type": "string",
-          "enum": ["smms", "github", "cloudinary"],
-          "default": "smms",
+          "enum": ["github", "smms", "cloudinary"],
+          "default": "github",
           "description": "图床服务提供商",
           "enumDescriptions": [
-            "SM.MS - 免费图床服务",
-            "GitHub - 使用GitHub仓库作为图床",
+            "GitHub - 使用GitHub仓库作为图床（推荐）",
+            "SM.MS - 免费图床服务（已停止注册，不推荐）",
             "Cloudinary - 专业图片CDN服务"
           ]
         },

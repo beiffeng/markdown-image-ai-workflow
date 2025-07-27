@@ -88,7 +88,7 @@ export class PluginConfigReader {
     
     return {
       enabled: config.get<boolean>('enabled', true),
-      provider: config.get<'smms' | 'github' | 'cloudinary'>('provider', 'smms'),
+      provider: config.get<'smms' | 'github' | 'cloudinary'>('provider', 'github'),
       respectVSCodeConfig: config.get<boolean>('respectVSCodeConfig', true),
       fallbackBehavior: config.get<'sameDirectory' | 'disable' | 'prompt'>('fallbackBehavior', 'sameDirectory'),
       deleteLocalAfterUpload: config.get<boolean>('deleteLocalAfterUpload', false),

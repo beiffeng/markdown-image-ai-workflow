@@ -101,22 +101,22 @@ export class ConfigurationGuide {
   private async configureImageFlow(): Promise<void> {
     const providers = [
       {
+        label: '$(github) GitHub',
+        description: '推荐 - GitHub仓库图床',
+        detail: '稳定可靠，需要配置仓库名称和Personal Access Token',
+        provider: 'github'
+      },
+      {
         label: '$(cloud) SM.MS',
         description: '⚠️ 不推荐（已停止注册）',
         detail: '已关闭新用户注册，仅供现有用户使用',
         provider: 'smms'
-      },
-      {
-        label: '$(github) GitHub',
-        description: 'GitHub仓库图床',
-        detail: '需要配置仓库名称和Personal Access Token',
-        provider: 'github'
       }
     ];
 
     const choice = await vscode.window.showQuickPick(providers, {
       title: '选择图床服务',
-      placeHolder: '选择您要使用的图床服务'
+      placeHolder: '推荐使用GitHub图床，稳定可靠且长期可用'
     });
 
     if (choice) {

@@ -40,18 +40,22 @@ export class MarkdownReplacer {
 
       // 执行替换
       const editor = await vscode.window.showTextDocument(document);
+      const newText = imageReference.newText(remoteUrl);
       const success = await editor.edit(editBuilder => {
-        editBuilder.replace(imageReference.range, imageReference.newText(remoteUrl));
+        editBuilder.replace(imageReference.range, newText);
       });
 
       if (success) {
         // 保存文档
         await document.save();
         
+        // 计算新的光标位置：原始位置 + 新文本长度
+        const newEndColumn = imageReference.range.start.character + newText.length;
+        
         return {
           success: true,
           line: imageReference.range.start.line,
-          column: imageReference.range.end.character
+          column: newEndColumn
         };
       } else {
         return {
