@@ -61,18 +61,18 @@ Markdown Image AI Workflow: 设置推荐配置
 #### 🔒 GitHub（推荐）
 ```json
 {
-  "markdownImageFlow.provider": "github",
-  "markdownImageFlow.github.repo": "username/your-repo",
-  "markdownImageFlow.github.token": "ghp_your-token-here",
-  "markdownImageFlow.github.branch": "main"
+  "markdownImageAIWorkflow.provider": "github",
+  "markdownImageAIWorkflow.github.repo": "username/your-repo",
+  "markdownImageAIWorkflow.github.token": "ghp_your-token-here",
+  "markdownImageAIWorkflow.github.branch": "main"
 }
 ```
 
 #### ❌ SM.MS（不推荐，仅供已有用户）
 ```json
 {
-  "markdownImageFlow.provider": "smms",
-  "markdownImageFlow.smms.token": "your-api-token-here"
+  "markdownImageAIWorkflow.provider": "smms",
+  "markdownImageAIWorkflow.smms.token": "your-api-token-here"
 }
 ```
 
@@ -100,17 +100,17 @@ Markdown Image AI Workflow: 设置推荐配置
 ```json
 {
   // 启用状态
-  "markdownImageFlow.enabled": true,
+  "markdownImageAIWorkflow.enabled": true,
   
   // 图床选择
-  "markdownImageFlow.provider": "smms", // "smms" | "github" | "cloudinary"
+  "markdownImageAIWorkflow.provider": "smms", // "smms" | "github" | "cloudinary"
   
   // 处理策略  
-  "markdownImageFlow.respectVSCodeConfig": true,
-  "markdownImageFlow.fallbackBehavior": "sameDirectory", // "sameDirectory" | "disable" | "prompt"
+  "markdownImageAIWorkflow.respectVSCodeConfig": true,
+  "markdownImageAIWorkflow.fallbackBehavior": "sameDirectory", // "sameDirectory" | "disable" | "prompt"
   
   // 清理选项
-  "markdownImageFlow.deleteLocalAfterUpload": false
+  "markdownImageAIWorkflow.deleteLocalAfterUpload": false
 }
 ```
 
@@ -118,12 +118,12 @@ Markdown Image AI Workflow: 设置推荐配置
 ```json
 {
   // SM.MS 配置
-  "markdownImageFlow.smms.token": "",
+  "markdownImageAIWorkflow.smms.token": "",
   
   // GitHub 配置  
-  "markdownImageFlow.github.repo": "username/repo",
-  "markdownImageFlow.github.token": "ghp_xxxxxxxxxxxx",
-  "markdownImageFlow.github.branch": "main"
+  "markdownImageAIWorkflow.github.repo": "username/repo",
+  "markdownImageAIWorkflow.github.token": "ghp_xxxxxxxxxxxx",
+  "markdownImageAIWorkflow.github.branch": "main"
 }
 ```
 

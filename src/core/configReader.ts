@@ -84,7 +84,7 @@ export class PluginConfigReader {
    * 获取插件配置
    */
   getConfig(): MarkdownImageAIWorkflowConfig {
-    const config = vscode.workspace.getConfiguration('markdownImageFlow');
+    const config = vscode.workspace.getConfiguration('markdownImageAIWorkflow');
     
     return {
       enabled: config.get<boolean>('enabled', true),
@@ -169,7 +169,7 @@ export class PluginConfigReader {
    */
   onConfigChange(callback: (config: MarkdownImageAIWorkflowConfig) => void): vscode.Disposable {
     return vscode.workspace.onDidChangeConfiguration(event => {
-      if (event.affectsConfiguration('markdownImageFlow') || 
+      if (event.affectsConfiguration('markdownImageAIWorkflow') || 
           event.affectsConfiguration('markdown.copyFiles') ||
           event.affectsConfiguration('markdown.editor')) {
         callback(this.getConfig());
@@ -192,7 +192,7 @@ export class ConfigReader {
    */
   onConfigChange(callback: () => void): vscode.Disposable {
     return vscode.workspace.onDidChangeConfiguration(event => {
-      if (event.affectsConfiguration('markdownImageFlow') || 
+      if (event.affectsConfiguration('markdownImageAIWorkflow') || 
           event.affectsConfiguration('markdown.copyFiles') ||
           event.affectsConfiguration('markdown.editor')) {
         callback();

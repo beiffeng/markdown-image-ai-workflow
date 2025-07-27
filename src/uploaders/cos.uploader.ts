@@ -254,7 +254,7 @@ export class COSUploader implements ImageUploader {
    * 获取配置
    */
   private getConfig() {
-    const config = vscode.workspace.getConfiguration('markdownImageFlow.cos');
+    const config = vscode.workspace.getConfiguration('markdownImageAIWorkflow.cos');
     return {
       secretId: config.get<string>('secretId', ''),
       secretKey: config.get<string>('secretKey', ''),

@@ -41,7 +41,7 @@ export class SMSUploader implements ImageUploader {
       });
 
       // 获取API Token（可选）
-      const config = vscode.workspace.getConfiguration('markdownImageFlow.smms');
+      const config = vscode.workspace.getConfiguration('markdownImageAIWorkflow.smms');
       const token = config.get<string>('token');
       console.log('MarkdownImageAIWorkflow: SM.MS Token配置:', token ? '已配置' : '未配置');
 
@@ -146,7 +146,7 @@ export class SMSUploader implements ImageUploader {
    */
   isConfigured(): boolean {
     // SM.MS已停止匿名上传，必须配置API Token
-    const config = vscode.workspace.getConfiguration('markdownImageFlow.smms');
+    const config = vscode.workspace.getConfiguration('markdownImageAIWorkflow.smms');
     const token = config.get<string>('token');
     return !!token;
   }
@@ -158,7 +158,7 @@ export class SMSUploader implements ImageUploader {
     hasToken: boolean;
     status: string;
   } {
-    const config = vscode.workspace.getConfiguration('markdownImageFlow.smms');
+    const config = vscode.workspace.getConfiguration('markdownImageAIWorkflow.smms');
     const token = config.get<string>('token');
     const hasToken = !!token;
 

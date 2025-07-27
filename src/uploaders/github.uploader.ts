@@ -183,7 +183,7 @@ export class GitHubUploader implements ImageUploader {
    * 获取配置
    */
   private getConfig() {
-    const config = vscode.workspace.getConfiguration('markdownImageFlow.github');
+    const config = vscode.workspace.getConfiguration('markdownImageAIWorkflow.github');
     return {
       repo: config.get<string>('repo', ''),
       token: config.get<string>('token', ''),

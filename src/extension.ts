@@ -39,7 +39,7 @@ class MarkdownImageAIWorkflowExtension {
       vscode.StatusBarAlignment.Right,
       100
     );
-    this.statusBarItem.command = 'markdownImageFlow.checkVSCodeConfig';
+    this.statusBarItem.command = 'markdownImageAIWorkflow.checkVSCodeConfig';
     context.subscriptions.push(this.statusBarItem);
     
     this.initialize();
@@ -251,19 +251,19 @@ class MarkdownImageAIWorkflowExtension {
   private registerCommands(): void {
     // 检查VSCode配置
     const checkConfigCmd = vscode.commands.registerCommand(
-      'markdownImageFlow.checkVSCodeConfig',
+      'markdownImageAIWorkflow.checkVSCodeConfig',
       () => this.checkVSCodeConfiguration()
     );
 
     // 设置推荐配置
     const setupConfigCmd = vscode.commands.registerCommand(
-      'markdownImageFlow.setupRecommendedConfig',
+      'markdownImageAIWorkflow.setupRecommendedConfig',
       () => this.setupRecommendedConfiguration()
     );
 
     // 手动上传当前图片
     const uploadCurrentCmd = vscode.commands.registerCommand(
-      'markdownImageFlow.uploadCurrentImage',
+      'markdownImageAIWorkflow.uploadCurrentImage',
       () => this.uploadCurrentImage()
     );
 
@@ -592,7 +592,7 @@ class MarkdownImageAIWorkflowExtension {
    * 打开插件设置
    */
   private async openPluginSettings(): Promise<void> {
-    await vscode.commands.executeCommand('workbench.action.openSettings', 'markdownImageFlow');
+    await vscode.commands.executeCommand('workbench.action.openSettings', 'markdownImageAIWorkflow');
   }
 
   /**

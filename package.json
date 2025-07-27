@@ -35,13 +35,13 @@
         "title": "基础设置",
         "order": 1,
         "properties": {
-          "markdownImageFlow.enabled": {
+          "markdownImageAIWorkflow.enabled": {
             "order": 1,
             "type": "boolean",
             "default": true,
             "description": "✨ 启用自动图床上传（需要先配置VSCode的markdown.copyFiles.destination）"
           },
-          "markdownImageFlow.provider": {
+          "markdownImageAIWorkflow.provider": {
             "order": 2,
             "type": "string",
             "enum": [
@@ -59,13 +59,13 @@
               "Cloudinary - 专业图片CDN服务"
             ]
           },
-          "markdownImageFlow.respectVSCodeConfig": {
+          "markdownImageAIWorkflow.respectVSCodeConfig": {
             "order": 3,
             "type": "boolean",
             "default": true,
             "description": "⚙️ 严格遵循VSCode原生markdown.copyFiles.destination配置"
           },
-          "markdownImageFlow.fallbackBehavior": {
+          "markdownImageAIWorkflow.fallbackBehavior": {
             "order": 4,
             "type": "string",
             "enum": [
@@ -81,7 +81,7 @@
               "提示 - 提示用户配置markdown.copyFiles.destination"
             ]
           },
-          "markdownImageFlow.deleteLocalAfterUpload": {
+          "markdownImageAIWorkflow.deleteLocalAfterUpload": {
             "order": 5,
             "type": "boolean",
             "default": false,
@@ -94,19 +94,19 @@
         "title": "GitHub配置",
         "order": 2,
         "properties": {
-          "markdownImageFlow.github.repo": {
+          "markdownImageAIWorkflow.github.repo": {
             "order": 1,
             "type": "string",
             "default": "",
             "description": "📦 GitHub仓库名称，格式：username/repo"
           },
-          "markdownImageFlow.github.token": {
+          "markdownImageAIWorkflow.github.token": {
             "order": 2,
             "type": "string",
             "default": "",
             "description": "🔑 GitHub Personal Access Token"
           },
-          "markdownImageFlow.github.branch": {
+          "markdownImageAIWorkflow.github.branch": {
             "order": 3,
             "type": "string",
             "default": "main",
@@ -119,31 +119,31 @@
         "title": "腾讯云COS配置",
         "order": 3,
         "properties": {
-          "markdownImageFlow.cos.secretId": {
+          "markdownImageAIWorkflow.cos.secretId": {
             "order": 1,
             "type": "string",
             "default": "",
             "description": "🔐 腾讯云API密钥ID（可在控制台 -> 访问管理 -> API密钥管理获取）"
           },
-          "markdownImageFlow.cos.secretKey": {
+          "markdownImageAIWorkflow.cos.secretKey": {
             "order": 2,
             "type": "string",
             "default": "",
             "description": "🔒 腾讯云API密钥Key"
           },
-          "markdownImageFlow.cos.bucket": {
+          "markdownImageAIWorkflow.cos.bucket": {
             "order": 3,
             "type": "string",
             "default": "",
             "description": "🪣 腾讯云COS存储桶名称，格式：bucketname-appid"
           },
-          "markdownImageFlow.cos.region": {
+          "markdownImageAIWorkflow.cos.region": {
             "order": 4,
             "type": "string",
             "default": "ap-guangzhou",
             "description": "🌏 腾讯云COS存储桶地域，如：ap-guangzhou、ap-shanghai、ap-beijing等"
           },
-          "markdownImageFlow.cos.path": {
+          "markdownImageAIWorkflow.cos.path": {
             "order": 5,
             "type": "string",
             "default": "images/",
@@ -156,7 +156,7 @@
         "title": "SM.MS配置",
         "order": 4,
         "properties": {
-          "markdownImageFlow.smms.token": {
+          "markdownImageAIWorkflow.smms.token": {
             "order": 1,
             "type": "string",
             "default": "",
@@ -167,15 +167,15 @@
     ],
     "commands": [
       {
-        "command": "markdownImageFlow.checkVSCodeConfig",
+        "command": "markdownImageAIWorkflow.checkVSCodeConfig",
         "title": "检查VSCode图片粘贴配置"
       },
       {
-        "command": "markdownImageFlow.setupRecommendedConfig",
+        "command": "markdownImageAIWorkflow.setupRecommendedConfig",
         "title": "设置推荐的markdown.copyFiles.destination配置"
       },
       {
-        "command": "markdownImageFlow.uploadCurrentImage",
+        "command": "markdownImageAIWorkflow.uploadCurrentImage",
         "title": "上传当前光标位置的图片"
       }
     ]
