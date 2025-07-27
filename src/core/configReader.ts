@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { VSCodeMarkdownConfig, MarkdownImageFlowConfig } from '../types';
+import { VSCodeMarkdownConfig, MarkdownImageAIWorkflowConfig } from '../types';
 
 /**
  * VSCode配置读取器 - 专门处理VSCode原生配置
@@ -83,7 +83,7 @@ export class PluginConfigReader {
   /**
    * 获取插件配置
    */
-  getConfig(): MarkdownImageFlowConfig {
+  getConfig(): MarkdownImageAIWorkflowConfig {
     const config = vscode.workspace.getConfiguration('markdownImageFlow');
     
     return {
@@ -167,7 +167,7 @@ export class PluginConfigReader {
   /**
    * 监听配置变化
    */
-  onConfigChange(callback: (config: MarkdownImageFlowConfig) => void): vscode.Disposable {
+  onConfigChange(callback: (config: MarkdownImageAIWorkflowConfig) => void): vscode.Disposable {
     return vscode.workspace.onDidChangeConfiguration(event => {
       if (event.affectsConfiguration('markdownImageFlow') || 
           event.affectsConfiguration('markdown.copyFiles') ||

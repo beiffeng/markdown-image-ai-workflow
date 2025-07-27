@@ -11,7 +11,7 @@ export interface VSCodeMarkdownConfig {
 /**
  * 插件配置类型定义
  */
-export interface MarkdownImageFlowConfig {
+export interface MarkdownImageAIWorkflowConfig {
   enabled: boolean;
   provider: 'smms' | 'github' | 'cloudinary' | 'cos';
   respectVSCodeConfig: boolean;

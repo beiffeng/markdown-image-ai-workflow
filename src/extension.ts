@@ -11,7 +11,7 @@ import { ImageFileInfo, UploadResult } from './types';
 /**
  * 插件主类
  */
-class MarkdownImageFlowExtension {
+class MarkdownImageAIWorkflowExtension {
   private vsCodeConfigReader: VSCodeConfigReader;
   private pluginConfigReader: PluginConfigReader;
   private configReader: ConfigReader;
@@ -49,7 +49,7 @@ class MarkdownImageFlowExtension {
    * 初始化插件
    */
   private async initialize(): Promise<void> {
-    console.log('MarkdownImageFlow: 插件正在初始化...');
+    console.log('MarkdownImageAIWorkflow: 插件正在初始化...');
     
     // 检查配置状态
     await this.updateStatusBar();
@@ -68,7 +68,7 @@ class MarkdownImageFlowExtension {
     // 新方案：监听文档变化
     this.setupDocumentWatcher();
     
-    console.log('MarkdownImageFlow: 插件初始化完成');
+    console.log('MarkdownImageAIWorkflow: 插件初始化完成');
   }
 
   /**
@@ -78,19 +78,19 @@ class MarkdownImageFlowExtension {
     const config = this.pluginConfigReader.getConfig();
     
     if (!config.enabled) {
-      console.log('MarkdownImageFlow: 插件已禁用，跳过文件监控');
+      console.log('MarkdownImageAIWorkflow: 插件已禁用，跳过文件监控');
       return;
     }
 
     // 调试：输出当前VSCode配置
     const vsCodeConfig = this.vsCodeConfigReader.getCopyFilesDestination();
-    console.log('MarkdownImageFlow: 当前VSCode配置:', vsCodeConfig);
+    console.log('MarkdownImageAIWorkflow: 当前VSCode配置:', vsCodeConfig);
 
     this.fileWatcher.start(async (imageInfo: ImageFileInfo) => {
       await this.handleImageDetected(imageInfo);
     });
 
-    console.log('MarkdownImageFlow: 文件监控已启动');
+    console.log('MarkdownImageAIWorkflow: 文件监控已启动');
   }
 
   /**
@@ -98,7 +98,7 @@ class MarkdownImageFlowExtension {
    */
   private async handleImageDetected(imageInfo: ImageFileInfo): Promise<void> {
     try {
-      console.log('MarkdownImageFlow: 🖼️ 检测到图片文件:', {
+      console.log('MarkdownImageAIWorkflow: 🖼️ 检测到图片文件:', {
         fileName: imageInfo.fileName,
         filePath: imageInfo.filePath,
         markdownFile: imageInfo.markdownFile,
@@ -106,7 +106,7 @@ class MarkdownImageFlowExtension {
       });
       
       const config = this.pluginConfigReader.getConfig();
-      console.log('MarkdownImageFlow: ⚙️ 当前配置:', {
+      console.log('MarkdownImageAIWorkflow: ⚙️ 当前配置:', {
         enabled: config.enabled,
         provider: config.provider,
         respectVSCodeConfig: config.respectVSCodeConfig
@@ -122,15 +122,15 @@ class MarkdownImageFlowExtension {
       // 创建上传器
       const uploader = this.uploaderFactory.create(config.provider);
       if (!uploader) {
-        console.error('MarkdownImageFlow: ❌ 不支持的图床服务:', config.provider);
+        console.error('MarkdownImageAIWorkflow: ❌ 不支持的图床服务:', config.provider);
         vscode.window.showErrorMessage(`不支持的图床服务: ${config.provider}`);
         return;
       }
 
-      console.log('MarkdownImageFlow: 🚀 使用上传器:', uploader.name);
+      console.log('MarkdownImageAIWorkflow: 🚀 使用上传器:', uploader.name);
 
       if (!uploader.isConfigured()) {
-        console.warn('MarkdownImageFlow: ⚠️ 上传器配置不完整:', uploader.name);
+        console.warn('MarkdownImageAIWorkflow: ⚠️ 上传器配置不完整:', uploader.name);
         vscode.window.showErrorMessage(`${uploader.name} 配置不完整，请检查设置`);
         return;
       }
@@ -144,11 +144,11 @@ class MarkdownImageFlowExtension {
         },
         async (progress) => {
           progress.report({ message: `上传到 ${uploader.name}` });
-          console.log('MarkdownImageFlow: 📤 开始上传到:', uploader.name);
+          console.log('MarkdownImageAIWorkflow: 📤 开始上传到:', uploader.name);
           
           // 上传图片
           const result = await uploader.upload(imageInfo.filePath);
-          console.log('MarkdownImageFlow: 📊 上传结果:', {
+          console.log('MarkdownImageAIWorkflow: 📊 上传结果:', {
             success: result.success,
             provider: result.provider,
             url: result.url ? '✅ 已获取URL' : '❌ 无URL',
@@ -163,7 +163,7 @@ class MarkdownImageFlowExtension {
         }
       );
     } catch (error) {
-      console.error('MarkdownImageFlow: 处理图片失败:', error);
+      console.error('MarkdownImageAIWorkflow: 处理图片失败:', error);
       vscode.window.showErrorMessage(`处理图片失败: ${error instanceof Error ? error.message : '未知错误'}`);
     }
   }
@@ -216,7 +216,7 @@ class MarkdownImageFlowExtension {
         );
       }
     } catch (error) {
-      console.error('MarkdownImageFlow: 处理上传成功结果失败:', error);
+      console.error('MarkdownImageAIWorkflow: 处理上传成功结果失败:', error);
       vscode.window.showErrorMessage('图片上传成功，但后续处理失败');
     }
   }
@@ -230,7 +230,7 @@ class MarkdownImageFlowExtension {
   ): Promise<void> {
     const errorMessage = `❌ 上传到 ${result.provider} 失败: ${result.error}`;
     vscode.window.showErrorMessage(errorMessage);
-    console.error('MarkdownImageFlow: 上传失败:', result.error);
+    console.error('MarkdownImageAIWorkflow: 上传失败:', result.error);
   }
 
   /**
@@ -239,9 +239,9 @@ class MarkdownImageFlowExtension {
   private async deleteLocalFile(filePath: string): Promise<void> {
     try {
       await fs.promises.unlink(filePath);
-      console.log('MarkdownImageFlow: 已删除本地文件:', filePath);
+      console.log('MarkdownImageAIWorkflow: 已删除本地文件:', filePath);
     } catch (error) {
-      console.error('MarkdownImageFlow: 删除本地文件失败:', error);
+      console.error('MarkdownImageAIWorkflow: 删除本地文件失败:', error);
     }
   }
 
@@ -353,7 +353,7 @@ class MarkdownImageFlowExtension {
     // 增强的语言和文件检测
     if (!editor) {
       vscode.window.showWarningMessage('没有活动的编辑器');
-      console.log('MarkdownImageFlow: uploadCurrentImage - 无活动编辑器');
+      console.log('MarkdownImageAIWorkflow: uploadCurrentImage - 无活动编辑器');
       return;
     }
 
@@ -362,7 +362,7 @@ class MarkdownImageFlowExtension {
     const fileName = document.fileName;
     const isMarkdownFile = languageId === 'markdown' || fileName.endsWith('.md') || fileName.endsWith('.markdown');
 
-    console.log('MarkdownImageFlow: uploadCurrentImage - 文件检测:', {
+    console.log('MarkdownImageAIWorkflow: uploadCurrentImage - 文件检测:', {
       fileName,
       languageId,
       isMarkdownFile,
@@ -372,11 +372,11 @@ class MarkdownImageFlowExtension {
     if (!isMarkdownFile) {
       const message = `当前文件不是 Markdown 文件 (语言: ${languageId}, 文件: ${fileName})`;
       vscode.window.showWarningMessage(message);
-      console.warn('MarkdownImageFlow:', message);
+      console.warn('MarkdownImageAIWorkflow:', message);
       return;
     }
 
-    console.log('MarkdownImageFlow: uploadCurrentImage - 确认为 Markdown 文件，继续处理');
+    console.log('MarkdownImageAIWorkflow: uploadCurrentImage - 确认为 Markdown 文件，继续处理');
     
     // TODO: 实现从当前光标位置识别图片并上传的功能
     vscode.window.showInformationMessage('手动上传功能正在开发中...');
@@ -387,7 +387,7 @@ class MarkdownImageFlowExtension {
    */
   private setupConfigurationWatcher(): void {
     const configWatcher = this.configReader.onConfigChange(async () => {
-      console.log('MarkdownImageFlow: 配置已更改，重新初始化...');
+      console.log('MarkdownImageAIWorkflow: 配置已更改，重新初始化...');
       
       // 重新启动文件监控
       this.fileWatcher.dispose();
@@ -404,7 +404,7 @@ class MarkdownImageFlowExtension {
    * 设置文档变化监听（新方案）
    */
   private setupDocumentWatcher(): void {
-    console.log('MarkdownImageFlow: 🔥 设置文档变化监听');
+    console.log('MarkdownImageAIWorkflow: 🔥 设置文档变化监听');
     
     // 监听文档内容变化
     const documentWatcher = vscode.workspace.onDidChangeTextDocument(async (event) => {
@@ -415,15 +415,15 @@ class MarkdownImageFlowExtension {
         return;
       }
       
-      console.log('MarkdownImageFlow: 📝 检测到markdown文档变化:', document.fileName);
-      console.log('MarkdownImageFlow: 📝 变化数量:', event.contentChanges.length);
+      console.log('MarkdownImageAIWorkflow: 📝 检测到markdown文档变化:', document.fileName);
+      console.log('MarkdownImageAIWorkflow: 📝 变化数量:', event.contentChanges.length);
       
       // 检查变化中是否包含新的图片链接
       for (let i = 0; i < event.contentChanges.length; i++) {
         const change = event.contentChanges[i];
         const newText = change.text;
         
-        console.log(`MarkdownImageFlow: 📝 变化 ${i + 1}:`, {
+        console.log(`MarkdownImageAIWorkflow: 📝 变化 ${i + 1}:`, {
           text: newText.substring(0, 100) + (newText.length > 100 ? '...' : ''),
           length: newText.length,
           range: change.range
@@ -435,7 +435,7 @@ class MarkdownImageFlowExtension {
         
         while ((match = imageRegex.exec(newText)) !== null) {
           const imagePath = match[2];
-          console.log('MarkdownImageFlow: 🖼️ 发现新的图片链接:', imagePath);
+          console.log('MarkdownImageAIWorkflow: 🖼️ 发现新的图片链接:', imagePath);
           
           // 如果是本地路径，尝试触发上传
           if (!imagePath.startsWith('http') && !imagePath.startsWith('data:')) {
@@ -444,7 +444,7 @@ class MarkdownImageFlowExtension {
         }
         
         if (!newText.includes('![')) {
-          console.log('MarkdownImageFlow: ⚠️ 变化文本中未发现图片链接模式');
+          console.log('MarkdownImageAIWorkflow: ⚠️ 变化文本中未发现图片链接模式');
         }
       }
     });
@@ -457,7 +457,7 @@ class MarkdownImageFlowExtension {
    */
   private async handleNewImageLink(markdownFile: string, imagePath: string): Promise<void> {
     try {
-      console.log('MarkdownImageFlow: 🔍 处理新图片链接:', {
+      console.log('MarkdownImageAIWorkflow: 🔍 处理新图片链接:', {
         markdownFile,
         imagePath
       });
@@ -467,16 +467,16 @@ class MarkdownImageFlowExtension {
       const markdownDir = path.dirname(markdownFile);
       const absoluteImagePath = path.resolve(markdownDir, imagePath);
       
-      console.log('MarkdownImageFlow: 📁 解析的图片绝对路径:', absoluteImagePath);
+      console.log('MarkdownImageAIWorkflow: 📁 解析的图片绝对路径:', absoluteImagePath);
       
       // 等待文件保存完成（带重试机制）
       const imageExists = await this.waitForImageFile(absoluteImagePath);
       if (!imageExists) {
-        console.log('MarkdownImageFlow: ❌ 等待超时，图片文件仍不存在:', absoluteImagePath);
+        console.log('MarkdownImageAIWorkflow: ❌ 等待超时，图片文件仍不存在:', absoluteImagePath);
         return;
       }
       
-      console.log('MarkdownImageFlow: ✅ 图片文件已确认存在');
+      console.log('MarkdownImageAIWorkflow: ✅ 图片文件已确认存在');
       
       // 模拟 ImageFileInfo
       const imageInfo: ImageFileInfo = {
@@ -487,13 +487,13 @@ class MarkdownImageFlowExtension {
         createdTime: new Date()
       };
       
-      console.log('MarkdownImageFlow: 🚀 准备处理图片:', imageInfo);
+      console.log('MarkdownImageAIWorkflow: 🚀 准备处理图片:', imageInfo);
       
       // 触发图片处理
       await this.handleImageDetected(imageInfo);
       
     } catch (error) {
-      console.error('MarkdownImageFlow: 处理新图片链接失败:', error);
+      console.error('MarkdownImageAIWorkflow: 处理新图片链接失败:', error);
     }
   }
 
@@ -504,7 +504,7 @@ class MarkdownImageFlowExtension {
     const fs = require('fs');
     
     for (let i = 0; i < maxRetries; i++) {
-      console.log(`MarkdownImageFlow: ⏳ 等待图片文件 (${i + 1}/${maxRetries}):`, filePath);
+      console.log(`MarkdownImageAIWorkflow: ⏳ 等待图片文件 (${i + 1}/${maxRetries}):`, filePath);
       
       if (fs.existsSync(filePath)) {
         // 文件存在，再等待一下确保写入完成
@@ -514,11 +514,11 @@ class MarkdownImageFlowExtension {
           // 尝试读取文件大小，确保文件写入完成
           const stats = fs.statSync(filePath);
           if (stats.size > 0) {
-            console.log('MarkdownImageFlow: ✅ 图片文件写入完成，大小:', stats.size, 'bytes');
+            console.log('MarkdownImageAIWorkflow: ✅ 图片文件写入完成，大小:', stats.size, 'bytes');
             return true;
           }
         } catch (error) {
-          console.log('MarkdownImageFlow: ⚠️ 文件存在但无法读取统计信息:', error);
+          console.log('MarkdownImageAIWorkflow: ⚠️ 文件存在但无法读取统计信息:', error);
         }
       }
       
@@ -606,24 +606,24 @@ class MarkdownImageFlowExtension {
 }
 
 // 插件实例
-let extension: MarkdownImageFlowExtension | undefined;
+let extension: MarkdownImageAIWorkflowExtension | undefined;
 
 export function activate(context: vscode.ExtensionContext) {
-  console.log('MarkdownImageFlow: 插件正在激活...');
-  console.error('MarkdownImageFlow: 激活开始 - 这是一个测试消息');
+  console.log('MarkdownImageAIWorkflow: 插件正在激活...');
+  console.error('MarkdownImageAIWorkflow: 激活开始 - 这是一个测试消息');
   
   try {
-    extension = new MarkdownImageFlowExtension(context);
+    extension = new MarkdownImageAIWorkflowExtension(context);
     
     // 将extension实例添加到context以便测试
     context.subscriptions.push({
       dispose: () => extension?.dispose()
     });
     
-    console.log('MarkdownImageFlow: 插件激活完成');
-    console.error('MarkdownImageFlow: 激活完成 - 这是一个测试消息');
+    console.log('MarkdownImageAIWorkflow: 插件激活完成');
+    console.error('MarkdownImageAIWorkflow: 激活完成 - 这是一个测试消息');
   } catch (error) {
-    console.error('MarkdownImageFlow: 插件激活失败:', error);
+    console.error('MarkdownImageAIWorkflow: 插件激活失败:', error);
     vscode.window.showErrorMessage(`图床上传插件激活失败: ${error instanceof Error ? error.message : '未知错误'}`);
   }
 }
@@ -632,52 +632,52 @@ export function activate(context: vscode.ExtensionContext) {
  * 记录激活环境信息
  */
 function logActivationEnvironment(): void {
-  console.log('MarkdownImageFlow: === 环境检测 ===');
-  console.log('MarkdownImageFlow: VSCode版本:', vscode.version);
+  console.log('MarkdownImageAIWorkflow: === 环境检测 ===');
+  console.log('MarkdownImageAIWorkflow: VSCode版本:', vscode.version);
   
   // 检测当前活动编辑器
   const activeEditor = vscode.window.activeTextEditor;
   if (activeEditor) {
-    console.log('MarkdownImageFlow: 当前活动编辑器:', {
+    console.log('MarkdownImageAIWorkflow: 当前活动编辑器:', {
       fileName: activeEditor.document.fileName,
       languageId: activeEditor.document.languageId,
       isMarkdown: activeEditor.document.languageId === 'markdown'
     });
   } else {
-    console.log('MarkdownImageFlow: 无活动编辑器');
+    console.log('MarkdownImageAIWorkflow: 无活动编辑器');
   }
   
   // 检测工作区中的 markdown 文件
   Promise.resolve(vscode.workspace.findFiles('**/*.{md,markdown}', '**/node_modules/**', 10))
     .then(files => {
-      console.log('MarkdownImageFlow: 发现 markdown 文件数量:', files.length);
+      console.log('MarkdownImageAIWorkflow: 发现 markdown 文件数量:', files.length);
       files.slice(0, 3).forEach(file => {
-        console.log('MarkdownImageFlow: 检测到 markdown 文件:', file.fsPath);
+        console.log('MarkdownImageAIWorkflow: 检测到 markdown 文件:', file.fsPath);
       });
     })
     .catch((error: any) => {
-      console.warn('MarkdownImageFlow: 搜索 markdown 文件失败:', error);
+      console.warn('MarkdownImageAIWorkflow: 搜索 markdown 文件失败:', error);
     });
   
   // 检测语言支持
   Promise.resolve(vscode.languages.getLanguages())
     .then(languages => {
       const hasMarkdown = languages.includes('markdown');
-      console.log('MarkdownImageFlow: 语言支持检测:', {
+      console.log('MarkdownImageAIWorkflow: 语言支持检测:', {
         supportedLanguages: languages.length,
         hasMarkdown,
         markdownLanguages: languages.filter(lang => lang.includes('markdown'))
       });
     })
     .catch((error: any) => {
-      console.error('MarkdownImageFlow: 语言支持检测失败:', error);
+      console.error('MarkdownImageAIWorkflow: 语言支持检测失败:', error);
     });
   
-  console.log('MarkdownImageFlow: === 环境检测完成 ===');
+  console.log('MarkdownImageAIWorkflow: === 环境检测完成 ===');
 }
 
 export function deactivate() {
-  console.log('MarkdownImageFlow: 插件正在停用...');
+  console.log('MarkdownImageAIWorkflow: 插件正在停用...');
   extension?.dispose();
   extension = undefined;
 }

@@ -84,7 +84,7 @@ export class CursorPositioner {
 
       return true;
     } catch (error) {
-      console.error('MarkdownImageFlow: 光标定位失败:', error);
+      console.error('MarkdownImageAIWorkflow: 光标定位失败:', error);
       return false;
     }
   }
@@ -113,7 +113,7 @@ export class CursorPositioner {
 
       return await this.positionCursor(filePath, actualLine, endColumn, options);
     } catch (error) {
-      console.error('MarkdownImageFlow: 定位到行尾失败:', error);
+      console.error('MarkdownImageAIWorkflow: 定位到行尾失败:', error);
       return false;
     }
   }
@@ -151,7 +151,7 @@ export class CursorPositioner {
         return await this.positionToLineEnd(filePath, line);
       }
     } catch (error) {
-      console.error('MarkdownImageFlow: 定位到图片链接后失败:', error);
+      console.error('MarkdownImageAIWorkflow: 定位到图片链接后失败:', error);
       return false;
     }
   }

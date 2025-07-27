@@ -43,10 +43,10 @@ export class SMSUploader implements ImageUploader {
       // 获取API Token（可选）
       const config = vscode.workspace.getConfiguration('markdownImageFlow.smms');
       const token = config.get<string>('token');
-      console.log('MarkdownImageFlow: SM.MS Token配置:', token ? '已配置' : '未配置');
+      console.log('MarkdownImageAIWorkflow: SM.MS Token配置:', token ? '已配置' : '未配置');
 
       const headers: Record<string, string> = {
-        'User-Agent': 'VSCode-MarkdownImageFlow/1.0',
+        'User-Agent': 'VSCode-MarkdownImageAIWorkflow/1.0',
         ...formData.getHeaders()
       };
 
@@ -59,7 +59,7 @@ export class SMSUploader implements ImageUploader {
       }
       
       headers['Authorization'] = `Bearer ${token}`;
-      console.log('MarkdownImageFlow: 使用API Token上传');
+      console.log('MarkdownImageAIWorkflow: 使用API Token上传');
 
       // 使用fetch发送请求
       const controller = new AbortController();
@@ -79,7 +79,7 @@ export class SMSUploader implements ImageUploader {
       }
 
       const responseData = await response.json() as any;
-      console.log('MarkdownImageFlow: SM.MS响应数据:', JSON.stringify(responseData, null, 2));
+      console.log('MarkdownImageAIWorkflow: SM.MS响应数据:', JSON.stringify(responseData, null, 2));
 
       // 处理响应
       if (responseData.success) {
@@ -116,7 +116,7 @@ export class SMSUploader implements ImageUploader {
         };
       }
     } catch (error) {
-      console.error('MarkdownImageFlow: SM.MS上传失败:', error);
+      console.error('MarkdownImageAIWorkflow: SM.MS上传失败:', error);
       
       let errorMsg = '上传失败';
       

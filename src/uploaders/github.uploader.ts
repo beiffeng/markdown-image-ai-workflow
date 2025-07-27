@@ -62,7 +62,7 @@ export class GitHubUploader implements ImageUploader {
       // 上传文件
       const uploadUrl = `${this.API_BASE}/repos/${config.repo}/contents/${remotePath}`;
       const uploadData = {
-        message: `Upload ${fileName} via VSCode Markdown Image Flow`,
+        message: `Upload file via VSCode Markdown Image AI Workflow`,
         content: base64Content,
         branch: config.branch
       };
@@ -72,7 +72,7 @@ export class GitHubUploader implements ImageUploader {
         headers: {
           'Authorization': `token ${config.token}`,
           'Content-Type': 'application/json',
-          'User-Agent': 'VSCode-MarkdownImageFlow/1.0'
+          'User-Agent': 'VSCode-MarkdownImageAIWorkflow/1.0'
         },
         body: JSON.stringify(uploadData)
       });
@@ -90,13 +90,13 @@ export class GitHubUploader implements ImageUploader {
         // 获取详细错误信息
         try {
           const errorResponse = await response.text();
-          console.error('MarkdownImageFlow: GitHub API错误详情:', {
+          console.error('MarkdownImageAIWorkflow: GitHub API错误详情:', {
             status: response.status,
             statusText: response.statusText,
             response: errorResponse
           });
         } catch (e) {
-          console.error('MarkdownImageFlow: 无法读取错误响应');
+          console.error('MarkdownImageAIWorkflow: 无法读取错误响应');
         }
         
         let errorMsg = `GitHub API返回状态码: ${response.status}`;
@@ -115,7 +115,7 @@ export class GitHubUploader implements ImageUploader {
         };
       }
     } catch (error) {
-      console.error('MarkdownImageFlow: GitHub上传失败:', error);
+      console.error('MarkdownImageAIWorkflow: GitHub上传失败:', error);
       
       let errorMsg = '上传失败';
       if (error instanceof Error) {
@@ -157,7 +157,7 @@ export class GitHubUploader implements ImageUploader {
       const response = await fetch(url, {
         headers: {
           'Authorization': `token ${token}`,
-          'User-Agent': 'VSCode-MarkdownImageFlow/1.0'
+          'User-Agent': 'VSCode-MarkdownImageAIWorkflow/1.0'
         }
       });
 
@@ -219,7 +219,7 @@ export class GitHubUploader implements ImageUploader {
       const response = await fetch(url, {
         headers: {
           'Authorization': `token ${config.token}`,
-          'User-Agent': 'VSCode-MarkdownImageFlow/1.0'
+          'User-Agent': 'VSCode-MarkdownImageAIWorkflow/1.0'
         }
       });
 

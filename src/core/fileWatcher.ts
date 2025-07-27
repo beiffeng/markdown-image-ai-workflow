@@ -43,38 +43,38 @@ export class ImageFileWatcher {
     const destinationConfig = this.configReader.vscode.getCopyFilesDestination();
     const watchPatterns = this.pathResolver.generateWatchPatterns(destinationConfig);
 
-    console.log('MarkdownImageFlow: 创建文件监控器，模式:', watchPatterns);
-    console.log('MarkdownImageFlow: 监控配置来源:', destinationConfig);
+    console.log('MarkdownImageAIWorkflow: 创建文件监控器，模式:', watchPatterns);
+    console.log('MarkdownImageAIWorkflow: 监控配置来源:', destinationConfig);
 
     // 调试：显示当前工作区信息
     const workspaceFolders = vscode.workspace.workspaceFolders;
-    console.log('MarkdownImageFlow: 当前工作区:', workspaceFolders?.map(f => f.uri.fsPath));
+    console.log('MarkdownImageAIWorkflow: 当前工作区:', workspaceFolders?.map(f => f.uri.fsPath));
 
     if (!workspaceFolders || workspaceFolders.length === 0) {
-      console.warn('MarkdownImageFlow: ⚠️ 没有工作区，尝试使用全局文件监控');
+      console.warn('MarkdownImageAIWorkflow: ⚠️ 没有工作区，尝试使用全局文件监控');
       // 在无工作区环境下，监控用户文档目录的常见位置
       const globalPatterns = [
         '**/' + watchPatterns[0] // 使用相对路径模式
       ];
       
       globalPatterns.forEach(pattern => {
-        console.log('MarkdownImageFlow: 创建全局监控器，模式:', pattern);
+        console.log('MarkdownImageAIWorkflow: 创建全局监控器，模式:', pattern);
         try {
           const watcher = vscode.workspace.createFileSystemWatcher(pattern);
           
           watcher.onDidCreate(uri => {
-            console.log('MarkdownImageFlow: 🔥 全局文件创建事件触发:', uri.fsPath);
+            console.log('MarkdownImageAIWorkflow: 🔥 全局文件创建事件触发:', uri.fsPath);
             this.handleFileCreated(uri, onImageDetected, destinationConfig);
           });
 
           watcher.onDidChange(uri => {
-            console.log('MarkdownImageFlow: 🔥 全局文件修改事件触发:', uri.fsPath);
+            console.log('MarkdownImageAIWorkflow: 🔥 全局文件修改事件触发:', uri.fsPath);
             this.handleFileChanged(uri, onImageDetected, destinationConfig);
           });
 
           this.watchers.push(watcher);
         } catch (error) {
-          console.error('MarkdownImageFlow: 创建全局监控器失败:', error);
+          console.error('MarkdownImageAIWorkflow: 创建全局监控器失败:', error);
         }
       });
       return;
@@ -82,19 +82,19 @@ export class ImageFileWatcher {
 
     // 为每个模式创建监控器
     watchPatterns.forEach(pattern => {
-      console.log('MarkdownImageFlow: 创建监控器，模式:', pattern);
+      console.log('MarkdownImageAIWorkflow: 创建监控器，模式:', pattern);
       
       const watcher = vscode.workspace.createFileSystemWatcher(pattern);
       
       // 监控文件创建事件
       watcher.onDidCreate(uri => {
-        console.log('MarkdownImageFlow: 🔥 文件创建事件触发:', uri.fsPath);
+        console.log('MarkdownImageAIWorkflow: 🔥 文件创建事件触发:', uri.fsPath);
         this.handleFileCreated(uri, onImageDetected, destinationConfig);
       });
 
       // 监控文件修改事件（某些情况下文件可能先创建后写入内容）
       watcher.onDidChange(uri => {
-        console.log('MarkdownImageFlow: 🔥 文件修改事件触发:', uri.fsPath);
+        console.log('MarkdownImageAIWorkflow: 🔥 文件修改事件触发:', uri.fsPath);
         this.handleFileChanged(uri, onImageDetected, destinationConfig);
       });
 
@@ -119,7 +119,7 @@ export class ImageFileWatcher {
       return;
     }
 
-    console.log('MarkdownImageFlow: 🔍 检测到新图片文件:', {
+    console.log('MarkdownImageAIWorkflow: 🔍 检测到新图片文件:', {
       path: uri.fsPath,
       fileName: path.basename(uri.fsPath)
     });
@@ -222,7 +222,7 @@ export class ImageFileWatcher {
         createdTime: stats.birthtime
       };
     } catch (error) {
-      console.error('MarkdownImageFlow: 创建图片文件信息失败:', error);
+      console.error('MarkdownImageAIWorkflow: 创建图片文件信息失败:', error);
       return null;
     }
   }

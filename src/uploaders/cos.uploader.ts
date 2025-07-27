@@ -40,12 +40,12 @@ export class COSUploader implements ImageUploader {
 
       // 初始化COS客户端
       if (!this.cosClient) {
-        console.log('MarkdownImageFlow: 初始化COS客户端...');
+        console.log('MarkdownImageAIWorkflow: 初始化COS客户端...');
         this.cosClient = new COS({
           SecretId: config.secretId,
           SecretKey: config.secretKey
         });
-        console.log('MarkdownImageFlow: COS客户端初始化完成');
+        console.log('MarkdownImageAIWorkflow: COS客户端初始化完成');
       }
 
       const fileName = path.basename(filePath);
@@ -57,12 +57,12 @@ export class COSUploader implements ImageUploader {
       const pathPrefix = config.path || 'images/';
       const key = `${pathPrefix}${year}/${month}/${fileName}`;
 
-      console.log('MarkdownImageFlow: 开始上传到COS:', key);
+      console.log('MarkdownImageAIWorkflow: 开始上传到COS:', key);
 
       // 检查文件是否已存在
       const existingFile = await this.checkFileExists(config.bucket, config.region, key);
       if (existingFile) {
-        console.log('MarkdownImageFlow: 文件已存在，返回现有URL:', existingFile);
+        console.log('MarkdownImageAIWorkflow: 文件已存在，返回现有URL:', existingFile);
         return {
           success: true,
           url: existingFile,
@@ -70,7 +70,7 @@ export class COSUploader implements ImageUploader {
         };
       }
 
-      console.log('MarkdownImageFlow: 文件不存在，开始上传...');
+      console.log('MarkdownImageAIWorkflow: 文件不存在，开始上传...');
 
       // 上传文件
       const uploadResult = await this.uploadFile(config.bucket, config.region, key, filePath);
@@ -78,15 +78,15 @@ export class COSUploader implements ImageUploader {
       if (uploadResult.success) {
         // 构建CDN访问URL
         const url = `https://${config.bucket}.cos.${config.region}.myqcloud.com/${key}`;
-        console.log('MarkdownImageFlow: COS上传成功，生成URL:', url);
+        console.log('MarkdownImageAIWorkflow: COS上传成功，生成URL:', url);
         
         // 验证文件确实已上传（可选的二次确认）
         setTimeout(async () => {
           const verifyUrl = await this.checkFileExists(config.bucket, config.region, key);
           if (verifyUrl) {
-            console.log('MarkdownImageFlow: 文件上传验证成功');
+            console.log('MarkdownImageAIWorkflow: 文件上传验证成功');
           } else {
-            console.warn('MarkdownImageFlow: 警告：文件上传后验证失败');
+            console.warn('MarkdownImageAIWorkflow: 警告：文件上传后验证失败');
           }
         }, 2000);
         
@@ -96,7 +96,7 @@ export class COSUploader implements ImageUploader {
           provider: this.name
         };
       } else {
-        console.error('MarkdownImageFlow: COS上传失败:', uploadResult.error);
+        console.error('MarkdownImageAIWorkflow: COS上传失败:', uploadResult.error);
         return {
           success: false,
           error: uploadResult.error,
@@ -104,7 +104,7 @@ export class COSUploader implements ImageUploader {
         };
       }
     } catch (error) {
-      console.error('MarkdownImageFlow: 腾讯云COS上传失败:', error);
+      console.error('MarkdownImageAIWorkflow: 腾讯云COS上传失败:', error);
       
       let errorMsg = '上传失败';
       if (error instanceof Error) {
@@ -136,7 +136,7 @@ export class COSUploader implements ImageUploader {
    */
   private async checkFileExists(bucket: string, region: string, key: string): Promise<string | null> {
     try {
-      console.log('MarkdownImageFlow: 检查文件是否存在:', key);
+      console.log('MarkdownImageAIWorkflow: 检查文件是否存在:', key);
       
       const result = await new Promise((resolve, reject) => {
         this.cosClient.headObject({
@@ -146,14 +146,14 @@ export class COSUploader implements ImageUploader {
         }, (err: any, data: any) => {
           if (err) {
             if (err.statusCode === 404 || err.code === 'NoSuchKey') {
-              console.log('MarkdownImageFlow: 文件不存在，可以上传');
+              console.log('MarkdownImageAIWorkflow: 文件不存在，可以上传');
               resolve(null); // 文件不存在
             } else {
-              console.error('MarkdownImageFlow: 检查文件存在性时发生错误:', err);
+              console.error('MarkdownImageAIWorkflow: 检查文件存在性时发生错误:', err);
               reject(err);
             }
           } else {
-            console.log('MarkdownImageFlow: 文件已存在:', data);
+            console.log('MarkdownImageAIWorkflow: 文件已存在:', data);
             resolve(data);
           }
         });
@@ -162,7 +162,7 @@ export class COSUploader implements ImageUploader {
       if (result) {
         // 文件存在，返回URL
         const url = `https://${bucket}.cos.${region}.myqcloud.com/${key}`;
-        console.log('MarkdownImageFlow: 文件已存在，返回URL:', url);
+        console.log('MarkdownImageAIWorkflow: 文件已存在，返回URL:', url);
         return url;
       } else {
         // 文件不存在
@@ -170,7 +170,7 @@ export class COSUploader implements ImageUploader {
       }
     } catch (error) {
       // 文件不存在或其他错误
-      console.log('MarkdownImageFlow: checkFileExists异常，假设文件不存在:', error);
+      console.log('MarkdownImageAIWorkflow: checkFileExists异常，假设文件不存在:', error);
       return null;
     }
   }
@@ -184,7 +184,7 @@ export class COSUploader implements ImageUploader {
     location?: string;
   }> {
     return new Promise((resolve) => {
-      console.log('MarkdownImageFlow: 准备上传文件:', {
+      console.log('MarkdownImageAIWorkflow: 准备上传文件:', {
         bucket,
         region,
         key,
@@ -198,11 +198,11 @@ export class COSUploader implements ImageUploader {
         FilePath: filePath,
         SliceSize: 1024 * 1024 * 5, // 5MB分片上传阈值
         onProgress: (progressData: any) => {
-          console.log('MarkdownImageFlow: COS上传进度:', Math.round(progressData.percent * 100) + '%');
+          console.log('MarkdownImageAIWorkflow: COS上传进度:', Math.round(progressData.percent * 100) + '%');
         }
       }, (err: any, data: any) => {
         if (err) {
-          console.error('MarkdownImageFlow: COS上传错误详情:', {
+          console.error('MarkdownImageAIWorkflow: COS上传错误详情:', {
             code: err.code,
             message: err.message,
             statusCode: err.statusCode,
@@ -227,7 +227,7 @@ export class COSUploader implements ImageUploader {
             error: errorMessage
           });
         } else {
-          console.log('MarkdownImageFlow: COS上传成功详情:', {
+          console.log('MarkdownImageAIWorkflow: COS上传成功详情:', {
             location: data.Location,
             etag: data.ETag,
             versionId: data.VersionId

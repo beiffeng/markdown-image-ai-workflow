@@ -204,11 +204,11 @@ export class VSCodePathResolver {
     imagePath: string,
     destinationConfig?: Record<string, string>
   ): string[] {
-    console.log('MarkdownImageFlow: findRelatedMarkdownFile - 开始查找相关文件:', imagePath);
+    console.log('MarkdownImageAIWorkflow: findRelatedMarkdownFile - 开始查找相关文件:', imagePath);
     
     const workspaceFolders = vscode.workspace.workspaceFolders;
     if (!workspaceFolders) {
-      console.warn('MarkdownImageFlow: findRelatedMarkdownFile - 无工作区文件夹');
+      console.warn('MarkdownImageAIWorkflow: findRelatedMarkdownFile - 无工作区文件夹');
       return [];
     }
 
@@ -218,11 +218,11 @@ export class VSCodePathResolver {
     try {
       for (const workspaceFolder of workspaceFolders) {
         const workspacePath = workspaceFolder.uri.fsPath;
-        console.log('MarkdownImageFlow: findRelatedMarkdownFile - 检查工作区:', workspacePath);
+        console.log('MarkdownImageAIWorkflow: findRelatedMarkdownFile - 检查工作区:', workspacePath);
         
         // 如果没有配置，检查同级目录下的markdown文件
         if (!destinationConfig) {
-          console.log('MarkdownImageFlow: findRelatedMarkdownFile - 无配置，使用默认查找');
+          console.log('MarkdownImageAIWorkflow: findRelatedMarkdownFile - 无配置，使用默认查找');
           const imageDir = path.dirname(imagePath);
           
           // 同步查找，避免异步问题
@@ -232,26 +232,26 @@ export class VSCodePathResolver {
             
             Promise.resolve(markdownFiles)
               .then(files => {
-                console.log('MarkdownImageFlow: findRelatedMarkdownFile - 找到同级目录 markdown 文件:', files.length);
+                console.log('MarkdownImageAIWorkflow: findRelatedMarkdownFile - 找到同级目录 markdown 文件:', files.length);
                 files.forEach(file => {
-                  console.log('MarkdownImageFlow: findRelatedMarkdownFile - 添加候选文件:', file.fsPath);
+                  console.log('MarkdownImageAIWorkflow: findRelatedMarkdownFile - 添加候选文件:', file.fsPath);
                   possibleMarkdownFiles.push(file.fsPath);
                 });
               })
               .catch((error: any) => {
-                console.error('MarkdownImageFlow: findRelatedMarkdownFile - 查找同级目录文件失败:', error);
+                console.error('MarkdownImageAIWorkflow: findRelatedMarkdownFile - 查找同级目录文件失败:', error);
               });
           } catch (error) {
-            console.error('MarkdownImageFlow: findRelatedMarkdownFile - 创建搜索模式失败:', error);
+            console.error('MarkdownImageAIWorkflow: findRelatedMarkdownFile - 创建搜索模式失败:', error);
           }
           continue;
         }
 
         // 根据配置推导可能的markdown文件位置
-        console.log('MarkdownImageFlow: findRelatedMarkdownFile - 使用配置查找:', destinationConfig);
+        console.log('MarkdownImageAIWorkflow: findRelatedMarkdownFile - 使用配置查找:', destinationConfig);
         for (const [globPattern] of Object.entries(destinationConfig)) {
           try {
-            console.log('MarkdownImageFlow: findRelatedMarkdownFile - 检查模式:', globPattern);
+            console.log('MarkdownImageAIWorkflow: findRelatedMarkdownFile - 检查模式:', globPattern);
             
             // 在工作区中搜索匹配的 markdown 文件
             const pattern = new vscode.RelativePattern(workspacePath, globPattern);
@@ -259,32 +259,32 @@ export class VSCodePathResolver {
             
             Promise.resolve(markdownFiles)
               .then(files => {
-                console.log('MarkdownImageFlow: findRelatedMarkdownFile - 模式匹配文件数:', files.length);
+                console.log('MarkdownImageAIWorkflow: findRelatedMarkdownFile - 模式匹配文件数:', files.length);
                 files.forEach(file => {
                   try {
                     const predicted = this.predictImageSavePath(file.fsPath, imageFileName, destinationConfig);
                     if (path.resolve(predicted.destinationPath) === path.resolve(imagePath)) {
-                      console.log('MarkdownImageFlow: findRelatedMarkdownFile - 路径匹配成功:', file.fsPath);
+                      console.log('MarkdownImageAIWorkflow: findRelatedMarkdownFile - 路径匹配成功:', file.fsPath);
                       possibleMarkdownFiles.push(file.fsPath);
                     }
                   } catch (error) {
-                    console.error('MarkdownImageFlow: findRelatedMarkdownFile - 路径预测失败:', error);
+                    console.error('MarkdownImageAIWorkflow: findRelatedMarkdownFile - 路径预测失败:', error);
                   }
                 });
               })
               .catch((error: any) => {
-                console.error('MarkdownImageFlow: findRelatedMarkdownFile - 查找配置匹配文件失败:', error);
+                console.error('MarkdownImageAIWorkflow: findRelatedMarkdownFile - 查找配置匹配文件失败:', error);
               });
           } catch (error) {
-            console.error('MarkdownImageFlow: findRelatedMarkdownFile - 处理 glob 模式失败:', error);
+            console.error('MarkdownImageAIWorkflow: findRelatedMarkdownFile - 处理 glob 模式失败:', error);
           }
         }
       }
     } catch (error) {
-      console.error('MarkdownImageFlow: findRelatedMarkdownFile - 整体查找过程失败:', error);
+      console.error('MarkdownImageAIWorkflow: findRelatedMarkdownFile - 整体查找过程失败:', error);
     }
 
-    console.log('MarkdownImageFlow: findRelatedMarkdownFile - 查找完成，候选文件数:', possibleMarkdownFiles.length);
+    console.log('MarkdownImageAIWorkflow: findRelatedMarkdownFile - 查找完成，候选文件数:', possibleMarkdownFiles.length);
     return possibleMarkdownFiles;
   }
 }

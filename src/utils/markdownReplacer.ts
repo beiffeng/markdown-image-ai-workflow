@@ -64,7 +64,7 @@ export class MarkdownReplacer {
         };
       }
     } catch (error) {
-      console.error('MarkdownImageFlow: 替换图片链接失败:', error);
+      console.error('MarkdownImageAIWorkflow: 替换图片链接失败:', error);
       return {
         success: false,
         error: error instanceof Error ? error.message : '未知错误'
@@ -90,7 +90,7 @@ export class MarkdownReplacer {
       const uri = vscode.Uri.file(filePath);
       return await vscode.workspace.openTextDocument(uri);
     } catch (error) {
-      console.error('MarkdownImageFlow: 打开文档失败:', error);
+      console.error('MarkdownImageAIWorkflow: 打开文档失败:', error);
       return null;
     }
   }
