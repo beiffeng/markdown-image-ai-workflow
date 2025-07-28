@@ -1,9 +1,19 @@
 #!/bin/bash
 
 # VSCode插件一键发布脚本
-# 使用方法: ./scripts/publish.sh [patch|minor|major]
+# 使用方法: ./scripts/publish.sh [options] [version-type]
+# 
+# 选项:
+#   --no-version, -n    跳过版本更新，直接发布当前版本
+#   --help, -h          显示帮助信息
+#
+# 版本类型: patch|minor|major (默认: patch)
 
 set -e  # 遇到错误立即退出
+
+# 全局变量
+SKIP_VERSION_UPDATE=false
+SHOW_HELP=false
 
 # 颜色定义
 RED='\033[0;31m'
@@ -220,15 +230,92 @@ post_publish_reminder() {
     log_info "发布流程完成 ✨"
 }
 
+# 显示帮助信息
+show_help() {
+    echo "VSCode插件一键发布脚本"
+    echo
+    echo "使用方法:"
+    echo "  ./scripts/publish.sh [options] [version-type]"
+    echo
+    echo "选项:"
+    echo "  --no-version, -n    跳过版本更新，直接发布当前版本"
+    echo "  --help, -h          显示此帮助信息"
+    echo
+    echo "版本类型:"
+    echo "  patch               补丁版本 (默认)"
+    echo "  minor               次版本"
+    echo "  major               主版本"
+    echo
+    echo "示例:"
+    echo "  ./scripts/publish.sh                    # 更新补丁版本并发布"
+    echo "  ./scripts/publish.sh minor              # 更新次版本并发布"
+    echo "  ./scripts/publish.sh --no-version       # 不更新版本，直接发布"
+    echo "  ./scripts/publish.sh -n patch           # 不更新版本，直接发布"
+}
+
+# 解析命令行参数
+parse_arguments() {
+    local version_type="patch"
+    
+    while [[ $# -gt 0 ]]; do
+        case $1 in
+            --no-version|-n)
+                SKIP_VERSION_UPDATE=true
+                shift
+                ;;
+            --help|-h)
+                SHOW_HELP=true
+                shift
+                ;;
+            patch|minor|major)
+                version_type="$1"
+                shift
+                ;;
+            *)
+                log_error "未知参数: $1"
+                echo
+                show_help
+                exit 1
+                ;;
+        esac
+    done
+    
+    echo "$version_type"
+}
+
+# 检查当前版本状态
+check_current_version() {
+    local current_version=$(node -p "require('./package.json').version")
+    local latest_tag=$(git describe --tags --abbrev=0 2>/dev/null | sed 's/^v//' || echo "none")
+    
+    log_info "当前版本状态:"
+    echo "  package.json: v$current_version"
+    echo "  最新Git标签: v$latest_tag"
+    
+    if [ "$latest_tag" != "none" ] && [ "$current_version" = "$latest_tag" ]; then
+        log_warning "当前版本 v$current_version 已经存在对应的Git标签"
+        echo "  如果要重新发布相同版本，请确认这是期望的行为"
+        echo
+        read -p "继续发布当前版本? (y/N): " -n 1 -r
+        echo
+        if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+            log_info "发布已取消"
+            exit 0
+        fi
+    fi
+    
+    echo "$current_version"
+}
+
 # 主函数
 main() {
-    local version_type=${1:-"patch"}
+    # 解析参数
+    local version_type=$(parse_arguments "$@")
     
-    # 验证版本类型参数
-    if [[ ! "$version_type" =~ ^(patch|minor|major)$ ]]; then
-        log_error "无效的版本类型: $version_type"
-        echo "使用方法: ./scripts/publish.sh [patch|minor|major]"
-        exit 1
+    # 显示帮助
+    if [ "$SHOW_HELP" = true ]; then
+        show_help
+        exit 0
     fi
     
     log_info "开始VSCode插件发布流程..."
@@ -240,11 +327,24 @@ main() {
     run_compile_check
     check_required_files
     
-    local new_version=$(update_version $version_type)
+    local new_version
+    if [ "$SKIP_VERSION_UPDATE" = true ]; then
+        log_info "跳过版本更新..."
+        new_version=$(check_current_version)
+    else
+        new_version=$(update_version $version_type)
+    fi
     
     package_test
     publish_to_marketplace
-    push_git_changes $new_version
+    
+    # 只有在实际更新了版本时才推送Git更改
+    if [ "$SKIP_VERSION_UPDATE" = false ]; then
+        push_git_changes $new_version
+    else
+        log_info "跳过Git提交和标签创建（版本未更新）"
+    fi
+    
     post_publish_reminder $new_version
 }
 

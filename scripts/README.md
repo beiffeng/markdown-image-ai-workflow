@@ -19,6 +19,12 @@
 
 # 发布重大版本
 ./scripts/publish.sh major
+
+# 跳过版本更新，直接发布当前版本
+./scripts/publish.sh --no-version
+
+# 简写形式
+./scripts/publish.sh -n
 ```
 
 ### 版本管理
