@@ -2,7 +2,7 @@
   "name": "markdown-image-ai-workflow",
   "displayName": "Markdown Image AI Workflow",
   "description": "专为Markdown写作打造的AI驱动图片工作流管理工具，集成智能上传、自动同步、多平台适配于一体的现代化解决方案",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "publisher": "beifeng",
   "icon": "icons/icon.png",
   "engines": {
