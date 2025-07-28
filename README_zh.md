@@ -10,6 +10,7 @@
 ## ✨ 核心特性
 
 ### 🤖 **AI智能化**
+
 - **AI驱动处理** - 智能图片识别、自动路径生成、智能重命名
 - **工作流自动化** - 粘贴→处理→上传→替换全流程自动化  
 - **智能适配** - 根据项目类型自动选择最佳处理策略
@@ -226,11 +227,11 @@ Markdown Image AI Workflow: 设置推荐配置
 | `⚙️ 需要配置` | 配置不完整 |
 | `⏸️ 已禁用` | 插件已禁用 |
 | `✅ 上传成功` | 刚完成上传 |
-![alt text](assets/README/image.png)
+
 ## 🔧 故障排除
-![alt text](assets/README/image-1.png)
+
 ### ❓ 常见问题
-dd 
+
 <details>
 <summary><strong>插件没有响应？</strong></summary>
 

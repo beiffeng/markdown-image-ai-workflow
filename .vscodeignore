@@ -15,3 +15,5 @@ node_modules/**
 .claude/**
 assets/**
 COS_DEBUG_GUIDE.md
+webpack.config.js
+out/**
