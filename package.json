@@ -27,7 +27,11 @@
     "cloudinary"
   ],
   "activationEvents": [
-    "onStartupFinished"
+    "onStartupFinished",
+    "onLanguage:markdown",
+    "onCommand:markdownImageAIWorkflow.checkVSCodeConfig",
+    "onCommand:markdownImageAIWorkflow.setupRecommendedConfig",
+    "onCommand:markdownImageAIWorkflow.uploadCurrentImage"
   ],
   "main": "./out/extension.js",
   "contributes": {

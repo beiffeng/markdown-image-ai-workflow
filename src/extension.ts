@@ -51,24 +51,34 @@ class MarkdownImageAIWorkflowExtension {
   private async initialize(): Promise<void> {
     console.log('MarkdownImageAIWorkflow: 插件正在初始化...');
     
-    // 检查配置状态
-    await this.updateStatusBar();
-    
-    // 延迟启动文件监控，确保workspace完全加载
-    setTimeout(() => {
-      this.startFileWatching();
-    }, 1000);
-    
-    // 注册命令
-    this.registerCommands();
-    
-    // 监听配置变化
-    this.setupConfigurationWatcher();
-    
-    // 新方案：监听文档变化
-    this.setupDocumentWatcher();
-    
-    console.log('MarkdownImageAIWorkflow: 插件初始化完成');
+    try {
+      // 检查配置状态
+      console.log('MarkdownImageAIWorkflow: 正在更新状态栏...');
+      await this.updateStatusBar();
+      
+      // 延迟启动文件监控，确保workspace完全加载
+      console.log('MarkdownImageAIWorkflow: 准备启动文件监控...');
+      setTimeout(() => {
+        this.startFileWatching();
+      }, 1000);
+      
+      // 注册命令
+      console.log('MarkdownImageAIWorkflow: 注册命令...');
+      this.registerCommands();
+      
+      // 监听配置变化
+      console.log('MarkdownImageAIWorkflow: 设置配置监听器...');
+      this.setupConfigurationWatcher();
+      
+      // 新方案：监听文档变化
+      console.log('MarkdownImageAIWorkflow: 设置文档变化监听器...');
+      this.setupDocumentWatcher();
+      
+      console.log('MarkdownImageAIWorkflow: ✅ 插件初始化完成');
+    } catch (error) {
+      console.error('MarkdownImageAIWorkflow: ❌ 初始化失败:', error);
+      vscode.window.showErrorMessage(`Markdown Image AI Workflow 初始化失败: ${error}`);
+    }
   }
 
   /**
@@ -611,6 +621,12 @@ let extension: MarkdownImageAIWorkflowExtension | undefined;
 export function activate(context: vscode.ExtensionContext) {
   console.log('MarkdownImageAIWorkflow: 插件正在激活...');
   console.error('MarkdownImageAIWorkflow: 激活开始 - 这是一个测试消息');
+  
+  // 输出插件版本和环境信息
+  const packageJson = require('../package.json');
+  console.log(`MarkdownImageAIWorkflow: 版本 ${packageJson.version}`);
+  console.log(`MarkdownImageAIWorkflow: VSCode版本 ${vscode.version}`);
+  console.log(`MarkdownImageAIWorkflow: 工作区文件夹数量: ${vscode.workspace.workspaceFolders?.length || 0}`);
   
   try {
     extension = new MarkdownImageAIWorkflowExtension(context);
