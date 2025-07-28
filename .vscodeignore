@@ -12,4 +12,6 @@ node_modules/**
 .git/**
 .DS_Store
 *.log
-README.md
+.claude/**
+assets/**
+COS_DEBUG_GUIDE.md

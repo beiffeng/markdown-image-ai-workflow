@@ -29,8 +29,8 @@
     <line x1="130" y1="70" x2="130" y2="150" stroke="#87CEFA" stroke-width="1" />
   </g>
   
-  <!-- AI Text - Optimized for rsvg-convert -->
-  <text x="110" y="122" font-family="Arial" font-size="38" font-weight="bold" fill="#FFFFFF" text-anchor="middle">
+  <!-- AI Text -->
+  <text x="110" y="115" font-family="Arial, sans-serif" font-size="38" fill="#FFFFFF" text-anchor="middle" dominant-baseline="middle">
     AI
   </text>
   
@@ -40,27 +40,17 @@
     <path id="bottomArc" d="M 30 134 A 95 95 0 0 0 190 134" />
   </defs>
   
-  <!-- Markdown Text (Top Arc) - Manual positioning to preserve curve -->
-  <g font-family="Arial" font-size="20" font-weight="normal" fill="#FFFFFF" text-anchor="middle">
-    <text x="52" y="68" transform="rotate(-32 52 68)">M</text>
-    <text x="63" y="58" transform="rotate(-22 63 58)">a</text>
-    <text x="74" y="49" transform="rotate(-12 74 49)">r</text>
-    <text x="86" y="42" transform="rotate(-2 86 42)">k</text>
-    <text x="98" y="38" transform="rotate(8 98 38)">d</text>
-    <text x="110" y="36" transform="rotate(18 110 36)">o</text>
-    <text x="122" y="38" transform="rotate(28 122 38)">w</text>
-    <text x="134" y="42" transform="rotate(38 134 42)">n</text>
-  </g>
+  <!-- Markdown Text (Top Arc) -->
+  <text font-family="Arial, sans-serif" font-size="20" fill="#FFFFFF" letter-spacing="3">
+    <textPath href="#topArc" startOffset="50%" text-anchor="middle">
+      Markdown
+    </textPath>
+  </text>
   
-  <!-- Workflow Text (Bottom Arc) - Manual positioning to preserve curve -->
-  <g font-family="Arial" font-size="16" font-weight="normal" fill="#FFFFFF" text-anchor="middle">
-    <text x="64" y="163" transform="rotate(28 64 163)">W</text>
-    <text x="74" y="171" transform="rotate(18 74 171)">o</text>
-    <text x="84" y="177" transform="rotate(8 84 177)">r</text>
-    <text x="95" y="181" transform="rotate(-2 95 181)">k</text>
-    <text x="106" y="183" transform="rotate(-12 106 183)">f</text>
-    <text x="117" y="181" transform="rotate(-22 117 181)">l</text>
-    <text x="127" y="177" transform="rotate(-32 127 177)">o</text>
-    <text x="137" y="171" transform="rotate(-42 137 171)">w</text>
-  </g>
+  <!-- Workflow Text (Bottom Arc) -->
+  <text font-family="Arial, sans-serif" font-size="16" fill="#FFFFFF" letter-spacing="4">
+    <textPath href="#bottomArc" startOffset="50%" text-anchor="middle">
+      Workflow
+    </textPath>
+  </text>
 </svg>
