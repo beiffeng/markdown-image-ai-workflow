@@ -2,7 +2,7 @@
   "name": "markdown-image-ai-workflow",
   "displayName": "Markdown Image AI Workflow",
   "description": "AI-driven image workflow management tool for Markdown writing, with smart upload, auto-sync, and multi-platform support",
-  "version": "0.2.0",
+  "version": "0.2.2",
   "publisher": "beifeng",
   "icon": "icons/icon.png",
   "engines": {
