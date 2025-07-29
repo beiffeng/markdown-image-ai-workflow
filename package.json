@@ -1,7 +1,7 @@
 {
   "name": "markdown-image-ai-workflow",
   "displayName": "Markdown Image AI Workflow",
-  "description": "专为Markdown写作打造的AI驱动图片工作流管理工具，集成智能上传、自动同步、多平台适配于一体的现代化解决方案",
+  "description": "AI-driven image workflow management tool for Markdown writing, with smart upload, auto-sync, and multi-platform support",
   "version": "0.1.5",
   "publisher": "beifeng",
   "icon": "icons/icon.png",
@@ -31,24 +31,43 @@
     "onDidChangeTextDocument:markdown",
     "onCommand:markdownImageAIWorkflow.checkVSCodeConfig",
     "onCommand:markdownImageAIWorkflow.setupRecommendedConfig",
-    "onCommand:markdownImageAIWorkflow.uploadCurrentImage"
+    "onCommand:markdownImageAIWorkflow.uploadCurrentImage",
+    "onCommand:markdownImageAIWorkflow.uploadAllLocalImages",
+    "onCommand:markdownImageAIWorkflow.showLocalImages",
+    "onCommand:markdownImageAIWorkflow.showQuickActions"
   ],
   "main": "./dist/extension.js",
   "contributes": {
     "configuration": [
       {
         "id": "basic",
-        "title": "基础设置",
+        "title": "Basic Settings",
         "order": 1,
         "properties": {
           "markdownImageAIWorkflow.enabled": {
             "order": 1,
             "type": "boolean",
             "default": true,
-            "description": "✨ 启用自动图床上传（需要先配置VSCode的markdown.copyFiles.destination）"
+            "description": "✨ Enable automatic image host upload (requires VSCode markdown.copyFiles.destination configuration)"
+          },
+          "markdownImageAIWorkflow.language": {
+            "order": 2,
+            "type": "string",
+            "enum": [
+              "auto",
+              "zh-cn",
+              "en"
+            ],
+            "default": "auto",
+            "description": "🌍 Plugin interface language",
+            "enumDescriptions": [
+              "Auto detect - Automatically choose based on VSCode language settings",
+              "中文 - Use Simplified Chinese interface",
+              "English - Use English interface"
+            ]
           },
           "markdownImageAIWorkflow.provider": {
-            "order": 2,
+            "order": 3,
             "type": "string",
             "enum": [
               "github",
@@ -59,24 +78,24 @@
               "cloudinary"
             ],
             "default": "github",
-            "description": "🏠 图床服务提供商",
+            "description": "🏠 Image host service provider",
             "enumDescriptions": [
-              "GitHub - 使用GitHub仓库作为图床（推荐）",
-              "腾讯云COS - 腾讯云对象存储（适合国内用户）",
-              "阿里云OSS - 阿里云对象存储（高性能，适合国内用户）",
-              "七牛云存储 - 七牛云对象存储（国内CDN优化，适合个人用户）",
-              "SM.MS - 免费图床服务（已停止注册，不推荐）",
-              "Cloudinary - 专业图片CDN服务"
+              "GitHub - Use GitHub repository as image host (recommended)",
+              "Tencent Cloud COS - Tencent Cloud Object Storage (good for China users)",
+              "Aliyun OSS - Alibaba Cloud Object Storage (high performance, good for China users)",
+              "Qiniu Cloud Storage - Qiniu Cloud Object Storage (China CDN optimized, good for personal users)",
+              "SM.MS - Free image hosting service (registration closed, not recommended)",
+              "Cloudinary - Professional image CDN service"
             ]
           },
           "markdownImageAIWorkflow.respectVSCodeConfig": {
-            "order": 3,
+            "order": 4,
             "type": "boolean",
             "default": true,
             "description": "⚙️ 严格遵循VSCode原生markdown.copyFiles.destination配置"
           },
           "markdownImageAIWorkflow.fallbackBehavior": {
-            "order": 4,
+            "order": 5,
             "type": "string",
             "enum": [
               "sameDirectory",
@@ -92,7 +111,7 @@
             ]
           },
           "markdownImageAIWorkflow.deleteLocalAfterUpload": {
-            "order": 5,
+            "order": 6,
             "type": "boolean",
             "default": false,
             "description": "🗑️ 上传成功后删除本地图片文件"
@@ -258,17 +277,44 @@
     "commands": [
       {
         "command": "markdownImageAIWorkflow.checkVSCodeConfig",
-        "title": "检查VSCode图片粘贴配置"
+        "title": "Check VSCode Image Paste Configuration"
       },
       {
         "command": "markdownImageAIWorkflow.setupRecommendedConfig",
-        "title": "设置推荐的markdown.copyFiles.destination配置"
+        "title": "Setup Recommended Configuration"
       },
       {
         "command": "markdownImageAIWorkflow.uploadCurrentImage",
-        "title": "上传当前光标位置的图片"
+        "title": "📤 Upload Current Image"
+      },
+      {
+        "command": "markdownImageAIWorkflow.uploadAllLocalImages",
+        "title": "📦 Upload All Local Images"
+      },
+      {
+        "command": "markdownImageAIWorkflow.showLocalImages",
+        "title": "📁 Show Local Images"
       }
-    ]
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "command": "markdownImageAIWorkflow.uploadCurrentImage",
+          "when": "resourceExtname == .md && editorLangId == markdown",
+          "group": "markdownImageAIWorkflow@1"
+        },
+        {
+          "command": "markdownImageAIWorkflow.uploadAllLocalImages",
+          "when": "resourceExtname == .md && editorLangId == markdown",
+          "group": "markdownImageAIWorkflow@2"
+        },
+        {
+          "command": "markdownImageAIWorkflow.showLocalImages",
+          "when": "resourceExtname == .md && editorLangId == markdown",
+          "group": "markdownImageAIWorkflow@3"
+        }
+      ]
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run package",

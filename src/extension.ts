@@ -7,6 +7,9 @@ import { UploaderFactory } from './uploaders/uploader.interface';
 import { MarkdownReplacer } from './utils/markdownReplacer';
 import { CursorPositioner } from './utils/cursorPosition';
 import { ImageFileInfo, UploadResult } from './types';
+import { ImagePathParser } from './utils/imagePathParser';
+import { ImageCodeActionProvider, ImageDiagnosticsProvider } from './providers/imageCodeActionProvider';
+import { t, getI18n } from './i18n';
 
 /**
  * 插件主类
@@ -22,6 +25,8 @@ class MarkdownImageAIWorkflowExtension {
   private cursorPositioner: CursorPositioner;
   private disposables: vscode.Disposable[] = [];
   private statusBarItem: vscode.StatusBarItem;
+  private codeActionProvider: ImageCodeActionProvider;
+  private diagnosticsProvider: ImageDiagnosticsProvider;
 
   constructor(context: vscode.ExtensionContext) {
     // 初始化组件
@@ -33,13 +38,15 @@ class MarkdownImageAIWorkflowExtension {
     this.uploaderFactory = new UploaderFactory();
     this.markdownReplacer = new MarkdownReplacer();
     this.cursorPositioner = new CursorPositioner();
+    this.codeActionProvider = new ImageCodeActionProvider();
+    this.diagnosticsProvider = new ImageDiagnosticsProvider();
     
     // 创建状态栏项
     this.statusBarItem = vscode.window.createStatusBarItem(
       vscode.StatusBarAlignment.Right,
       100
     );
-    this.statusBarItem.command = 'markdownImageAIWorkflow.checkVSCodeConfig';
+    this.statusBarItem.command = 'markdownImageAIWorkflow.showQuickActions';
     context.subscriptions.push(this.statusBarItem);
     
     this.initialize();
@@ -65,6 +72,10 @@ class MarkdownImageAIWorkflowExtension {
       // 注册命令
       console.log('MarkdownImageAIWorkflow: 注册命令...');
       this.registerCommands();
+      
+      // 注册 Code Action Provider
+      console.log('MarkdownImageAIWorkflow: 注册 Code Action Provider...');
+      this.registerCodeActionProvider();
       
       // 监听配置变化
       console.log('MarkdownImageAIWorkflow: 设置配置监听器...');
@@ -277,7 +288,81 @@ class MarkdownImageAIWorkflowExtension {
       () => this.uploadCurrentImage()
     );
 
-    this.disposables.push(checkConfigCmd, setupConfigCmd, uploadCurrentCmd);
+    // 批量上传所有本地图片
+    const uploadAllCmd = vscode.commands.registerCommand(
+      'markdownImageAIWorkflow.uploadAllLocalImages',
+      () => this.uploadAllLocalImages()
+    );
+
+    // 查看本地图片列表
+    const showLocalImagesCmd = vscode.commands.registerCommand(
+      'markdownImageAIWorkflow.showLocalImages',
+      () => this.showLocalImages()
+    );
+
+    // 状态栏快速操作
+    const showQuickActionsCmd = vscode.commands.registerCommand(
+      'markdownImageAIWorkflow.showQuickActions',
+      () => this.showQuickActions()
+    );
+
+    this.disposables.push(checkConfigCmd, setupConfigCmd, uploadCurrentCmd, uploadAllCmd, showLocalImagesCmd, showQuickActionsCmd);
+  }
+
+  /**
+   * 注册 Code Action Provider
+   */
+  private registerCodeActionProvider(): void {
+    // 注册 Code Action Provider for Markdown files
+    const codeActionDisposable = vscode.languages.registerCodeActionsProvider(
+      { scheme: 'file', language: 'markdown' },
+      this.codeActionProvider,
+      {
+        providedCodeActionKinds: ImageCodeActionProvider.providedCodeActionKinds
+      }
+    );
+
+    this.disposables.push(codeActionDisposable);
+
+    // 设置文档变化监听，用于更新诊断信息
+    const diagnosticsWatcher = vscode.workspace.onDidChangeTextDocument(async (event) => {
+      if (event.document.languageId === 'markdown') {
+        // 延迟更新诊断，避免频繁更新
+        setTimeout(() => {
+          this.diagnosticsProvider.updateDiagnostics(event.document);
+        }, 500);
+      }
+    });
+
+    // 监听文档打开事件
+    const documentOpenWatcher = vscode.workspace.onDidOpenTextDocument((document) => {
+      if (document.languageId === 'markdown') {
+        this.diagnosticsProvider.updateDiagnostics(document);
+      }
+    });
+
+    // 监听文档关闭事件
+    const documentCloseWatcher = vscode.workspace.onDidCloseTextDocument((document) => {
+      if (document.languageId === 'markdown') {
+        this.diagnosticsProvider.clear();
+      }
+    });
+
+    this.disposables.push(diagnosticsWatcher, documentOpenWatcher, documentCloseWatcher);
+
+    // 监听活动编辑器变化，更新状态栏
+    const activeEditorWatcher = vscode.window.onDidChangeActiveTextEditor(async () => {
+      await this.updateStatusBar();
+    });
+    
+    this.disposables.push(activeEditorWatcher);
+
+    // 对当前已打开的markdown文档进行初始诊断
+    vscode.workspace.textDocuments.forEach((document) => {
+      if (document.languageId === 'markdown') {
+        this.diagnosticsProvider.updateDiagnostics(document);
+      }
+    });
   }
 
   /**
@@ -360,10 +445,8 @@ class MarkdownImageAIWorkflowExtension {
   private async uploadCurrentImage(): Promise<void> {
     const editor = vscode.window.activeTextEditor;
     
-    // 增强的语言和文件检测
     if (!editor) {
-      vscode.window.showWarningMessage('没有活动的编辑器');
-      console.log('MarkdownImageAIWorkflow: uploadCurrentImage - 无活动编辑器');
+      vscode.window.showWarningMessage(t('errors.noActiveEditor'));
       return;
     }
 
@@ -380,7 +463,7 @@ class MarkdownImageAIWorkflowExtension {
     });
 
     if (!isMarkdownFile) {
-      const message = `当前文件不是 Markdown 文件 (语言: ${languageId}, 文件: ${fileName})`;
+      const message = t('errors.notMarkdownFile') + ' ' + t('errors.notMarkdownFileDetail', languageId, fileName);
       vscode.window.showWarningMessage(message);
       console.warn('MarkdownImageAIWorkflow:', message);
       return;
@@ -388,8 +471,376 @@ class MarkdownImageAIWorkflowExtension {
 
     console.log('MarkdownImageAIWorkflow: uploadCurrentImage - 确认为 Markdown 文件，继续处理');
     
-    // TODO: 实现从当前光标位置识别图片并上传的功能
-    vscode.window.showInformationMessage('手动上传功能正在开发中...');
+    // 解析当前光标位置的图片链接
+    const position = editor.selection.active;
+    const imageInfo = ImagePathParser.parseImageAtCursor(document, position);
+    
+    if (!imageInfo) {
+      vscode.window.showInformationMessage(t('upload.currentImageNotFound'));
+      return;
+    }
+    
+    if (!imageInfo.isLocalPath) {
+      vscode.window.showInformationMessage(t('upload.alreadyRemote'));
+      return;
+    }
+    
+    if (!imageInfo.fileExists) {
+      vscode.window.showWarningMessage(t('upload.fileNotExist') + ': ' + imageInfo.imagePath);
+      return;
+    }
+    
+    console.log('MarkdownImageAIWorkflow: 检测到本地图片:', {
+      altText: imageInfo.altText,
+      imagePath: imageInfo.imagePath,
+      absolutePath: imageInfo.absolutePath
+    });
+    
+    // 检查插件配置
+    const config = this.pluginConfigReader.getConfig();
+    if (!config.enabled) {
+      vscode.window.showWarningMessage(t('upload.enableFirst'));
+      return;
+    }
+    
+    const pluginStatus = this.pluginConfigReader.isPluginProperlyConfigured();
+    if (!pluginStatus.configured) {
+      this.showConfigurationError(pluginStatus.issues);
+      return;
+    }
+
+    // 创建上传器
+    const uploader = this.uploaderFactory.create(config.provider);
+    if (!uploader) {
+      vscode.window.showErrorMessage(t('upload.unsupportedProvider') + ': ' + config.provider);
+      return;
+    }
+
+    if (!uploader.isConfigured()) {
+      vscode.window.showErrorMessage(`${uploader.name} ` + t('upload.configIncomplete'));
+      return;
+    }
+
+    // 构建 ImageFileInfo 对象
+    const imageFileInfo: ImageFileInfo = {
+      fileName: require('path').basename(imageInfo.absolutePath!),
+      filePath: imageInfo.absolutePath!,
+      markdownFile: document.fileName,
+      relativePath: imageInfo.imagePath,
+      createdTime: new Date()
+    };
+
+    // 执行上传
+    try {
+      await vscode.window.withProgress(
+        {
+          location: vscode.ProgressLocation.Notification,
+          title: t('upload.uploading'),
+          cancellable: false
+        },
+        async (progress) => {
+          progress.report({ message: t('upload.uploadTo') + ' ' + uploader.name });
+          console.log('MarkdownImageAIWorkflow: 开始手动上传到:', uploader.name);
+          
+          const result = await uploader.upload(imageFileInfo.filePath);
+          console.log('MarkdownImageAIWorkflow: 手动上传结果:', {
+            success: result.success,
+            provider: result.provider,
+            url: result.url ? '✅ 已获取URL' : '❌ 无URL',
+            error: result.error
+          });
+          
+          if (result.success && result.url) {
+            await this.handleUploadSuccess(imageFileInfo, result);
+          } else {
+            await this.handleUploadFailure(imageFileInfo, result);
+          }
+        }
+      );
+    } catch (error) {
+      console.error('MarkdownImageAIWorkflow: 手动上传失败:', error);
+      vscode.window.showErrorMessage(t('upload.uploadFailed') + ': ' + (error instanceof Error ? error.message : t('errors.unknownError')));
+    }
+  }
+
+  /**
+   * 批量上传所有本地图片
+   */
+  private async uploadAllLocalImages(): Promise<void> {
+    const editor = vscode.window.activeTextEditor;
+    
+    if (!editor) {
+      vscode.window.showWarningMessage(t('errors.noActiveEditor'));
+      return;
+    }
+
+    const document = editor.document;
+    if (document.languageId !== 'markdown') {
+      vscode.window.showWarningMessage(t('errors.notMarkdownFile'));
+      return;
+    }
+
+    // 检查插件配置
+    const config = this.pluginConfigReader.getConfig();
+    if (!config.enabled) {
+      vscode.window.showWarningMessage(t('upload.enableFirst'));
+      return;
+    }
+    
+    const pluginStatus = this.pluginConfigReader.isPluginProperlyConfigured();
+    if (!pluginStatus.configured) {
+      this.showConfigurationError(pluginStatus.issues);
+      return;
+    }
+
+    // 查找所有本地图片
+    const localImages = ImagePathParser.findAllLocalImages(document);
+    const existingImages = localImages.filter(img => img.fileExists);
+    
+    if (existingImages.length === 0) {
+      vscode.window.showInformationMessage(t('images.noLocalImagesFound'));
+      return;
+    }
+
+    // 确认批量上传
+    const choice = await vscode.window.showInformationMessage(
+      t('images.localImagesFound', existingImages.length) + ' ' + t('upload.batchUploadConfirm'),
+      { modal: true },
+      t('confirm'),
+      t('cancel')
+    );
+
+    if (choice !== t('confirm')) {
+      return;
+    }
+
+    // 创建上传器
+    const uploader = this.uploaderFactory.create(config.provider);
+    if (!uploader || !uploader.isConfigured()) {
+      vscode.window.showErrorMessage(`${config.provider} ` + t('upload.configIncomplete'));
+      return;
+    }
+
+    // 批量上传
+    let successCount = 0;
+    let failCount = 0;
+
+    await vscode.window.withProgress(
+      {
+        location: vscode.ProgressLocation.Notification,
+        title: t('upload.batchUploadProgress'),
+        cancellable: false
+      },
+      async (progress) => {
+        for (let i = 0; i < existingImages.length; i++) {
+          const imageInfo = existingImages[i];
+          
+          progress.report({
+            message: `${t('upload.uploadCurrent')} ${i + 1}/${existingImages.length}: ${imageInfo.imagePath}`,
+            increment: (100 / existingImages.length)
+          });
+
+          try {
+            const imageFileInfo: ImageFileInfo = {
+              fileName: require('path').basename(imageInfo.absolutePath!),
+              filePath: imageInfo.absolutePath!,
+              markdownFile: document.fileName,
+              relativePath: imageInfo.imagePath,
+              createdTime: new Date()
+            };
+
+            const result = await uploader.upload(imageFileInfo.filePath);
+            
+            if (result.success && result.url) {
+              await this.handleUploadSuccess(imageFileInfo, result);
+              successCount++;
+            } else {
+              console.error('MarkdownImageAIWorkflow: 批量上传失败:', result.error);
+              failCount++;
+            }
+          } catch (error) {
+            console.error('MarkdownImageAIWorkflow: 批量上传异常:', error);
+            failCount++;
+          }
+
+          // 短暂延迟，避免请求过快
+          await new Promise(resolve => setTimeout(resolve, 100));
+        }
+      }
+    );
+
+    // 显示结果
+    if (successCount > 0 && failCount === 0) {
+      vscode.window.showInformationMessage(t('upload.batchUploadResult.allSuccess', successCount));
+    } else if (successCount > 0 && failCount > 0) {
+      vscode.window.showWarningMessage(t('upload.batchUploadResult.partialSuccess', successCount, failCount));
+    } else {
+      vscode.window.showErrorMessage(t('upload.batchUploadResult.allFailed', failCount));
+    }
+  }
+
+  /**
+   * 查看本地图片列表
+   */
+  private async showLocalImages(): Promise<void> {
+    const editor = vscode.window.activeTextEditor;
+    
+    if (!editor) {
+      vscode.window.showWarningMessage(t('errors.noActiveEditor'));
+      return;
+    }
+
+    const document = editor.document;
+    if (document.languageId !== 'markdown') {
+      vscode.window.showWarningMessage(t('errors.notMarkdownFile'));
+      return;
+    }
+
+    // 查找所有本地图片
+    const localImages = ImagePathParser.findAllLocalImages(document);
+    
+    if (localImages.length === 0) {
+      vscode.window.showInformationMessage(t('images.noLocalImagesFound'));
+      return;
+    }
+
+    // 构建选择项
+    const items: vscode.QuickPickItem[] = localImages.map((imageInfo) => ({
+      label: `${imageInfo.fileExists ? '📁' : '❌'} ${imageInfo.imagePath}`,
+      description: imageInfo.fileExists ? t('images.fileExists') : t('images.fileNotExists'),
+      detail: `${t('images.lineNumber', imageInfo.startPosition.line + 1)} | ${t('images.altText', imageInfo.altText)}`,
+      picked: false
+    }));
+
+    // 显示选择器
+    const selection = await vscode.window.showQuickPick(items, {
+      title: t('images.localImagesFound', localImages.length),
+      placeHolder: t('images.selectToNavigate'),
+      canPickMany: false
+    });
+
+    if (selection) {
+      // 定位到选中的图片
+      const selectedIndex = items.indexOf(selection);
+      const imageInfo = localImages[selectedIndex];
+      
+      const position = imageInfo.startPosition;
+      const newSelection = new vscode.Selection(position, position);
+      
+      editor.selection = newSelection;
+      editor.revealRange(new vscode.Range(position, position), vscode.TextEditorRevealType.InCenter);
+      
+      // 如果文件存在且可以上传，询问是否上传
+      if (imageInfo.fileExists) {
+        const choice = await vscode.window.showInformationMessage(
+          t('images.uploadThis'),
+          t('upload.upload'),
+          t('cancel')
+        );
+        
+        if (choice === t('upload.upload')) {
+          await this.uploadCurrentImage();
+        }
+      }
+    }
+  }
+
+  /**
+   * 显示快速操作菜单
+   */
+  private async showQuickActions(): Promise<void> {
+    const editor = vscode.window.activeTextEditor;
+    const isMarkdownFile = editor && editor.document.languageId === 'markdown';
+    
+    // 获取本地图片信息
+    let localImageInfo = '';
+    if (isMarkdownFile) {
+      const localImages = ImagePathParser.findAllLocalImages(editor.document);
+      const existingImages = localImages.filter(img => img.fileExists);
+      localImageInfo = existingImages.length > 0 ? ` (${existingImages.length} 张本地图片)` : ' (无本地图片)';
+    }
+
+    const items: vscode.QuickPickItem[] = [
+      {
+        label: '🔧 检查配置状态',
+        description: '查看VSCode和插件配置状态',
+        detail: '检查markdown.copyFiles.destination和图床配置'
+      }
+    ];
+
+    if (isMarkdownFile) {
+      const localImages = ImagePathParser.findAllLocalImages(editor!.document);
+      const existingImages = localImages.filter(img => img.fileExists);
+      
+      items.push(
+        {
+          label: '📤 上传当前图片',
+          description: '上传光标位置的图片',
+          detail: '将光标定位到图片链接上，然后上传到图床'
+        },
+        {
+          label: `📦 批量上传${localImageInfo}`,
+          description: existingImages.length > 0 ? `上传文档中所有 ${existingImages.length} 张本地图片` : '当前文档无本地图片',
+          detail: existingImages.length > 0 ? '一次性上传所有本地图片到图床' : undefined
+        },
+        {
+          label: `📁 查看本地图片${localImageInfo}`,
+          description: localImages.length > 0 ? `浏览文档中的 ${localImages.length} 张本地图片` : '当前文档无本地图片',
+          detail: localImages.length > 0 ? '查看、定位并选择上传本地图片' : undefined
+        }
+      );
+    } else {
+      items.push({
+        label: '📝 当前不是 Markdown 文件',
+        description: '图片上传功能仅在 Markdown 文件中可用',
+        detail: '请打开一个 .md 文件以使用图片上传功能'
+      });
+    }
+
+    // 添加设置相关选项
+    items.push(
+      {
+        label: '⚙️ 插件设置',
+        description: '配置图床服务和上传选项',
+        detail: '设置GitHub、阿里云OSS、腾讯云COS等图床服务'
+      },
+      {
+        label: '🔗 VSCode设置',
+        description: '配置markdown.copyFiles.destination',
+        detail: '设置图片粘贴保存位置'
+      }
+    );
+
+    const selection = await vscode.window.showQuickPick(items, {
+      title: 'Markdown Image AI Workflow - 快速操作',
+      placeHolder: '选择要执行的操作'
+    });
+
+    if (!selection) {
+      return;
+    }
+
+    // 执行对应操作
+    switch (selection.label) {
+      case '🔧 检查配置状态':
+        await this.checkVSCodeConfiguration();
+        break;
+      case '📤 上传当前图片':
+        await this.uploadCurrentImage();
+        break;
+      case `📦 批量上传${localImageInfo}`:
+        await this.uploadAllLocalImages();
+        break;
+      case `📁 查看本地图片${localImageInfo}`:
+        await this.showLocalImages();
+        break;
+      case '⚙️ 插件设置':
+        await this.openPluginSettings();
+        break;
+      case '🔗 VSCode设置':
+        await this.openVSCodeSettings();
+        break;
+    }
   }
 
   /**
@@ -407,7 +858,16 @@ class MarkdownImageAIWorkflowExtension {
       await this.updateStatusBar();
     });
 
-    this.disposables.push(configWatcher);
+    // 监听语言配置变化
+    const languageWatcher = vscode.workspace.onDidChangeConfiguration(async (event) => {
+      if (event.affectsConfiguration('markdownImageAIWorkflow.language')) {
+        console.log('MarkdownImageAIWorkflow: 语言配置已更改，刷新国际化...');
+        getI18n().refresh();
+        await this.updateStatusBar();
+      }
+    });
+
+    this.disposables.push(configWatcher, languageWatcher);
   }
 
   /**
@@ -547,13 +1007,26 @@ class MarkdownImageAIWorkflowExtension {
     const pluginStatus = this.pluginConfigReader.isPluginProperlyConfigured();
     const config = this.pluginConfigReader.getConfig();
 
+    // 获取当前文档的本地图片数量
+    let localImageCount = 0;
+    const editor = vscode.window.activeTextEditor;
+    if (editor && editor.document.languageId === 'markdown') {
+      const localImages = ImagePathParser.findAllLocalImages(editor.document);
+      localImageCount = localImages.filter(img => img.fileExists).length;
+    }
+
     if (!config.enabled) {
       this.statusBarItem.text = '$(cloud-upload) 图床上传已禁用';
       this.statusBarItem.tooltip = '点击查看配置状态';
       this.statusBarItem.backgroundColor = new vscode.ThemeColor('statusBarItem.warningBackground');
     } else if (vsCodeStatus.configured && pluginStatus.configured) {
-      this.statusBarItem.text = `$(cloud-upload) ${pluginStatus.provider}`;
-      this.statusBarItem.tooltip = `图床上传已启用 - ${pluginStatus.provider}`;
+      if (localImageCount > 0) {
+        this.statusBarItem.text = `$(cloud-upload) ${pluginStatus.provider} | ${localImageCount} 张本地图片`;
+        this.statusBarItem.tooltip = `图床上传已启用 - ${pluginStatus.provider}\n当前文档有 ${localImageCount} 张本地图片待上传\n点击查看更多选项`;
+      } else {
+        this.statusBarItem.text = `$(cloud-upload) ${pluginStatus.provider}`;
+        this.statusBarItem.tooltip = `图床上传已启用 - ${pluginStatus.provider}\n点击查看配置状态`;
+      }
       this.statusBarItem.backgroundColor = undefined;
     } else {
       this.statusBarItem.text = '$(cloud-upload) 需要配置';
@@ -612,6 +1085,7 @@ class MarkdownImageAIWorkflowExtension {
     this.disposables.forEach(disposable => disposable.dispose());
     this.fileWatcher.dispose();
     this.statusBarItem.dispose();
+    this.diagnosticsProvider.dispose();
   }
 }
 

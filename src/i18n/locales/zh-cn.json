@@ -1,0 +1,130 @@
+{
+  "yes": "是",
+  "no": "否",
+  "cancel": "取消",
+  "confirm": "确定",
+  "upload": "上传",
+  "configure": "配置",
+  "error": "错误",
+  "warning": "警告",
+  "success": "成功",
+  
+  "status": {
+    "disabled": "图床上传已禁用",
+    "needsConfig": "需要配置",
+    "uploaderReady": "图床已配置",
+    "localImages": "张本地图片",
+    "noLocalImages": "无本地图片",
+    "clickForMore": "点击查看更多选项",
+    "checkConfig": "点击查看配置状态"
+  },
+  
+  "upload": {
+    "uploading": "正在上传图片到图床...",
+    "uploadTo": "上传到",
+    "uploadSuccess": "图片已上传到",
+    "uploadFailed": "上传失败",
+    "uploadCurrent": "上传当前图片",
+    "uploadAll": "批量上传",
+    "currentImageNotFound": "光标位置没有检测到图片链接",
+    "alreadyRemote": "当前图片已经是远程链接，无需上传",
+    "fileNotExist": "图片文件不存在",
+    "enableFirst": "图床上传功能已禁用，请在设置中启用",
+    "configIncomplete": "配置不完整，请检查设置",
+    "unsupportedProvider": "不支持的图床服务",
+    "batchUploadConfirm": "张本地图片，是否全部上传到图床？",
+    "batchUploadProgress": "批量上传图片到图床",
+    "batchUploadResult": {
+      "allSuccess": "✅ 成功上传 {0} 张图片",
+      "partialSuccess": "⚠️ 上传完成：成功 {0} 张，失败 {1} 张",
+      "allFailed": "❌ 上传失败：{0} 张图片上传失败"
+    }
+  },
+  
+  "config": {
+    "checkStatus": "检查配置状态",
+    "setupRecommended": "设置推荐配置",
+    "vscodeConfig": "VSCode 原生配置",
+    "pluginConfig": "图床上传配置",
+    "configured": "已配置",
+    "needsConfiguration": "需要配置",
+    "vscodeNormal": "VSCode图片粘贴功能正常",
+    "currentProvider": "当前使用",
+    "applyRecommended": "应用配置",
+    "viewSettings": "查看设置",
+    "recommendedApplied": "✅ 推荐配置已应用",
+    "applyFailed": "应用配置失败",
+    "recommendedPrompt": "是否应用推荐的VSCode配置？这将设置图片保存到 assets/{文档名}/ 目录",
+    "title": "Markdown Image AI Workflow - 配置状态检查",
+    "selectItem": "选择要查看或配置的项目"
+  },
+  
+  "images": {
+    "noImageAtCursor": "光标位置没有检测到图片链接",
+    "noLocalImagesFound": "当前文档中没有找到本地图片",
+    "localImagesFound": "发现 {0} 张本地图片",
+    "selectToNavigate": "选择图片定位到对应位置，或按 Esc 返回",
+    "fileExists": "文件存在",
+    "fileNotExists": "文件不存在",
+    "lineNumber": "第 {0} 行",
+    "uploadThis": "是否上传此图片到图床？",
+    "showLocalImages": "查看本地图片",
+    "altText": "Alt: \"{0}\""
+  },
+  
+  "quickActions": {
+    "title": "Markdown Image AI Workflow - 快速操作",
+    "selectAction": "选择要执行的操作",
+    "checkConfigStatus": "🔧 检查配置状态",
+    "checkConfigDesc": "查看VSCode和插件配置状态",
+    "checkConfigDetail": "检查markdown.copyFiles.destination和图床配置",
+    "uploadCurrentImage": "📤 上传当前图片",
+    "uploadCurrentDesc": "上传光标位置的图片",
+    "uploadCurrentDetail": "将光标定位到图片链接上，然后上传到图床",
+    "batchUpload": "📦 批量上传",
+    "batchUploadDesc": "上传文档中所有 {0} 张本地图片",
+    "batchUploadDescEmpty": "当前文档无本地图片",
+    "batchUploadDetail": "一次性上传所有本地图片到图床",
+    "showImages": "📁 查看本地图片",
+    "showImagesDesc": "浏览文档中的 {0} 张本地图片",
+    "showImagesDescEmpty": "当前文档无本地图片",
+    "showImagesDetail": "查看、定位并选择上传本地图片",
+    "notMarkdownFile": "📝 当前不是 Markdown 文件",
+    "notMarkdownDesc": "图片上传功能仅在 Markdown 文件中可用",
+    "notMarkdownDetail": "请打开一个 .md 文件以使用图片上传功能",
+    "pluginSettings": "⚙️ 插件设置",
+    "pluginSettingsDesc": "配置图床服务和上传选项",
+    "pluginSettingsDetail": "设置GitHub、阿里云OSS、腾讯云COS等图床服务",
+    "vscodeSettings": "🔗 VSCode设置",
+    "vscodeSettingsDesc": "配置markdown.copyFiles.destination",
+    "vscodeSettingsDetail": "设置图片粘贴保存位置"
+  },
+  
+  "codeAction": {
+    "uploadToImageHost": "🚀 上传图片到图床",
+    "imageFileNotFound": "⚠️ 图片文件不存在"
+  },
+  
+  "errors": {
+    "noActiveEditor": "没有活动的编辑器",
+    "notMarkdownFile": "当前文件不是 Markdown 文件",
+    "notMarkdownFileDetail": "(语言: {0}, 文件: {1})",
+    "initializationFailed": "初始化失败",
+    "uploadFailed": "上传失败",
+    "configurationError": "图床上传配置有问题: {0}",
+    "deleteLocalFileFailed": "删除本地文件失败",
+    "handleUploadResultFailed": "图片上传成功，但后续处理失败",
+    "batchUploadFailed": "批量上传失败",
+    "batchUploadException": "批量上传异常",
+    "linkReplacementFailed": "图片上传成功，但替换链接失败: {0}",
+    "unknownError": "未知错误"
+  },
+  
+  "commands": {
+    "checkVSCodeConfig": "检查VSCode图片粘贴配置",
+    "setupRecommendedConfig": "设置推荐的markdown.copyFiles.destination配置",
+    "uploadCurrentImage": "上传当前光标位置的图片",
+    "uploadAllLocalImages": "上传文档中所有本地图片",
+    "showLocalImages": "查看文档中的本地图片"
+  }
+}

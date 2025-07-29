@@ -1,0 +1,130 @@
+{
+  "yes": "Yes",
+  "no": "No",
+  "cancel": "Cancel",
+  "confirm": "Confirm",
+  "upload": "Upload",
+  "configure": "Configure",
+  "error": "Error",
+  "warning": "Warning",
+  "success": "Success",
+  
+  "status": {
+    "disabled": "Image upload disabled",
+    "needsConfig": "Needs configuration",
+    "uploaderReady": "Image host ready",
+    "localImages": "local images",
+    "noLocalImages": "no local images",
+    "clickForMore": "Click for more options",
+    "checkConfig": "Click to check configuration"
+  },
+  
+  "upload": {
+    "uploading": "Uploading image to image host...",
+    "uploadTo": "Upload to",
+    "uploadSuccess": "Image uploaded to",
+    "uploadFailed": "Upload failed",
+    "uploadCurrent": "Upload current image",
+    "uploadAll": "Batch upload",
+    "currentImageNotFound": "No image link detected at cursor position",
+    "alreadyRemote": "Current image is already a remote link, no upload needed",
+    "fileNotExist": "Image file does not exist",
+    "enableFirst": "Image upload is disabled, please enable it in settings",
+    "configIncomplete": "Configuration incomplete, please check settings",
+    "unsupportedProvider": "Unsupported image host service",
+    "batchUploadConfirm": "local images found, upload all to image host?",
+    "batchUploadProgress": "Batch uploading images to image host",
+    "batchUploadResult": {
+      "allSuccess": "✅ Successfully uploaded {0} images",
+      "partialSuccess": "⚠️ Upload completed: {0} successful, {1} failed",
+      "allFailed": "❌ Upload failed: {0} images failed to upload"
+    }
+  },
+  
+  "config": {
+    "checkStatus": "Check configuration status",
+    "setupRecommended": "Setup recommended configuration",
+    "vscodeConfig": "VSCode Native Configuration",
+    "pluginConfig": "Image Upload Configuration",
+    "configured": "Configured",
+    "needsConfiguration": "Needs configuration",
+    "vscodeNormal": "VSCode image paste function is working normally",
+    "currentProvider": "Currently using",
+    "applyRecommended": "Apply Configuration",
+    "viewSettings": "View Settings",
+    "recommendedApplied": "✅ Recommended configuration applied",
+    "applyFailed": "Failed to apply configuration",
+    "recommendedPrompt": "Apply recommended VSCode configuration? This will set images to be saved in assets/{document name}/ directory",
+    "title": "Markdown Image AI Workflow - Configuration Status Check",
+    "selectItem": "Select item to view or configure"
+  },
+  
+  "images": {
+    "noImageAtCursor": "No image link detected at cursor position",
+    "noLocalImagesFound": "No local images found in current document",
+    "localImagesFound": "Found {0} local images",
+    "selectToNavigate": "Select image to navigate to position, or press Esc to return",
+    "fileExists": "File exists",
+    "fileNotExists": "File does not exist",
+    "lineNumber": "Line {0}",
+    "uploadThis": "Upload this image to image host?",
+    "showLocalImages": "Show local images",
+    "altText": "Alt: \"{0}\""
+  },
+  
+  "quickActions": {
+    "title": "Markdown Image AI Workflow - Quick Actions",
+    "selectAction": "Select action to execute",
+    "checkConfigStatus": "🔧 Check Configuration Status",
+    "checkConfigDesc": "View VSCode and plugin configuration status",
+    "checkConfigDetail": "Check markdown.copyFiles.destination and image host configuration",
+    "uploadCurrentImage": "📤 Upload Current Image",
+    "uploadCurrentDesc": "Upload image at cursor position",
+    "uploadCurrentDetail": "Position cursor on image link, then upload to image host",
+    "batchUpload": "📦 Batch Upload",
+    "batchUploadDesc": "Upload all {0} local images in document",
+    "batchUploadDescEmpty": "No local images in current document",
+    "batchUploadDetail": "Upload all local images to image host at once",
+    "showImages": "📁 Show Local Images",
+    "showImagesDesc": "Browse {0} local images in document",
+    "showImagesDescEmpty": "No local images in current document",
+    "showImagesDetail": "View, navigate and select local images for upload",
+    "notMarkdownFile": "📝 Not a Markdown File",
+    "notMarkdownDesc": "Image upload feature is only available in Markdown files",
+    "notMarkdownDetail": "Please open a .md file to use image upload features",
+    "pluginSettings": "⚙️ Plugin Settings",
+    "pluginSettingsDesc": "Configure image host services and upload options",
+    "pluginSettingsDetail": "Setup GitHub, Alibaba Cloud OSS, Tencent Cloud COS and other image host services",
+    "vscodeSettings": "🔗 VSCode Settings",
+    "vscodeSettingsDesc": "Configure markdown.copyFiles.destination",
+    "vscodeSettingsDetail": "Set image paste save location"
+  },
+  
+  "codeAction": {
+    "uploadToImageHost": "🚀 Upload image to image host",
+    "imageFileNotFound": "⚠️ Image file not found"
+  },
+  
+  "errors": {
+    "noActiveEditor": "No active editor",
+    "notMarkdownFile": "Current file is not a Markdown file",
+    "notMarkdownFileDetail": "(Language: {0}, File: {1})",
+    "initializationFailed": "Initialization failed",
+    "uploadFailed": "Upload failed",
+    "configurationError": "Image upload configuration has issues: {0}",
+    "deleteLocalFileFailed": "Failed to delete local file",
+    "handleUploadResultFailed": "Image uploaded successfully, but post-processing failed",
+    "batchUploadFailed": "Batch upload failed",
+    "batchUploadException": "Batch upload exception",
+    "linkReplacementFailed": "Image uploaded successfully, but link replacement failed: {0}",
+    "unknownError": "Unknown error"
+  },
+  
+  "commands": {
+    "checkVSCodeConfig": "Check VSCode image paste configuration",
+    "setupRecommendedConfig": "Setup recommended markdown.copyFiles.destination configuration",
+    "uploadCurrentImage": "Upload current image at cursor position",
+    "uploadAllLocalImages": "Upload all local images in document",
+    "showLocalImages": "Show local images in document"
+  }
+}
